@@ -10,6 +10,10 @@
 
 [Mehmet Ozkaya - Trainer's GitHub Site](https://github.com/mehmetozkaya)
 
+NOTE: Moving Forward, a branch will be created cooresponding to a lecture where new or modified code is added to project. If applicable, the branch will be merged into main.
+
+Example: lecture69 branch created to create microservices/ProductService.csproj
+
 ## Pillar 1: Microservices
 
 [Martin Fowlers Microservices Article](https://martinfowler.com/articles/microservices.html)
