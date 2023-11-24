@@ -76,3 +76,17 @@ Example: lecture69 branch created to create microservices/ProductService.csproj
 ![Identifying and Decomposing Microservices for E-Commerce](./resources/005-identifying-decomposing-microservices-for-domain.png)
 
 ![Design: Cloud-Native E-commerce Microservices](./resources/006-design-cloud-native-e-commerce-microservices.png)
+
+## Pillar 2: Containers
+
+E-Commerce App Design
+
+Containerize application:
+
+- Write Dockerfile
+- Build Docker Image
+- Run Docker Container
+- Test running docker container on local docker env
+- Tag Docker Image
+- Publish image to a Registry: Docker Hub
+- Deploy to Cloud: AWS, Azure
