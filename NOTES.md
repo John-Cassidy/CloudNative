@@ -188,3 +188,56 @@ Check
 https://hub.docker.com/
 See
 https://hub.docker.com/repository/docker/jpcassidy/productservice/general
+
+## Configure and Deploy ProductService to AWS AppRunner
+
+[Download and Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
+Check AWS CLI
+aws --version
+
+[Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-user.html#cli-authentication-user-get)
+aws configure
+
+- Secret Access Key
+- Access Key ID
+- AWS Region
+- Output format
+
+[AWS Configure Commands](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+
+- aws configure list
+
+![Deploy ProductService Container to 
+AWS Apprunner](./resources/103_deploy-ProductService-container-to-AWS-AppRunner.png)
+
+### Pushing Docker Image to Amazon Elastic Container Registry (ECR)
+
+- Step 1: Create an Amazon ECR repository (name: productservice)
+- Step 2: Authenticate Docker to your Amazon ECR registry
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin xxxx.dkr.ecr.us-east-1.amazonaws.com/productservice
+
+- Step 3: Build Docker image
+  productservice:latest
+- Step 4: Tag Docker image
+  docker tag productservice:latest xxxx.dkr.ecr.us-east-1.amazonaws.com/productservice
+- Step 5: Push your Docker image to Amazon ECR
+  docker push xxxx.dkr.ecr.us-east-1.amazonaws.com/productservice:latest
+
+- List images
+  aws ecr list-images --repository-name productservice --output json --no-cli-pager
+
+### Deploy ProductService Container to AWS Apprunner
+
+- Step 1: Create a new service in AWS App Runner
+- Step 2: Configure the container image
+- Step 3: Configure the deployment settings
+- Step 4: Review your configuration and create the service
+- Step 5: Deploy to AWS App Runner that pull image from ECR
+
+### Clear AWS Resources
+
+- AWS App Runner
+- AWS ECR and delete images
+- Role – AppRunnerECRAccessRole
