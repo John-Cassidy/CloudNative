@@ -1,0 +1,35 @@
+@ProductService_HostAddress = https://xxxx.us-east-1.awsapprunner.com
+
+### Get All Products
+GET {{ProductService_HostAddress}}/api/products
+Accept: application/json
+
+### Get Product By Id
+GET {{ProductService_HostAddress}}/api/products/1
+Accept: application/json
+
+### Create Product
+POST {{ProductService_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "id": 4,
+    "name": "Product D",
+    "price": 123.99
+}
+
+### Update Product
+PUT {{ProductService_HostAddress}}/api/products/3
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "Product CC",
+    "price": 123.99
+}
+
+### Delete Product
+DELETE {{ProductService_HostAddress}}/api/products/1
+Accept: application/json
+
+###
