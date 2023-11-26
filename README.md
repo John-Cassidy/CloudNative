@@ -88,5 +88,12 @@ Containerize application:
 - Run Docker Container
 - Test running docker container on local docker env
 - Tag Docker Image
-- Publish image to a Registry: Docker Hub
-- Deploy to Cloud: AWS, Azure
+- Publish image to a Registry: Docker Hub, AWS ECR
+- Configure and Deploy ProductService to AWS AppRunner
+
+## Pillar 3: Container Orchestrators
+
+- Getting Started with Minikube and kubectl
+- Pods, Deployments, Services, Incress, ConfigMaps, Secrets on Kubernetes using Minikube
+- Best Practice for Creating Deployment and Services for Microservices
+- Helm Charts - Managing Kubernetes Applications with Helm

@@ -241,3 +241,133 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 - AWS App Runner
 - AWS ECR and delete images
 - Role – AppRunnerECRAccessRole
+
+## Install Minikube and kubectl
+
+- [Manually - Install Minikube](https://minikube.sigs.k8s.io/docs/start/)
+  [Video - Install Minikube in Windows 10 via Docker Desktop](https://www.youtube.com/watch?v=u2684TT9XHo)
+- [Install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- Test to ensure the version of kubectl
+  kubectl version -o json
+
+### Can you run Kubernetes and MiniKube at same time on Docker Desktop on Windows 11
+
+Yes, you can run both Kubernetes and Minikube at the same time on Docker Desktop on Windows 11. However, they will create separate Kubernetes clusters and won't interfere with each other.
+
+Docker Desktop's Kubernetes feature and Minikube both create a local Kubernetes cluster on your machine. Docker Desktop's Kubernetes runs as part of the Docker Desktop application, while Minikube runs as a separate virtual machine or a Docker container, depending on the driver you choose.
+
+Remember to manage your system resources (CPU, memory) wisely, as running both at the same time can be resource-intensive.
+
+### How to install minikube on docker desktop on windows 11
+
+To install Minikube on Docker Desktop on Windows 11, follow these steps:
+
+1. Ensure Docker Desktop is installed and running.
+2. Install Chocolatey, a package manager for Windows. Open PowerShell as an administrator and run:
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
+
+3. Install Minikube via Chocolatey:
+
+```powershell
+choco install minikube
+```
+
+4. Start Minikube:
+   This command starts a Minikube cluster using the Docker driver.
+
+```powershell
+minikube start --driver=docker
+
+# Results
+W1126 11:33:54.053549   15628 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\xxxx\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+😄  minikube v1.32.0 on Microsoft Windows 11 Pro 10.0.22631.2787 Build 22631.2787
+✨  Using the docker driver based on user configuration
+📌  Using Docker Desktop driver with root privileges
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.28.3 preload ...
+    > preloaded-images-k8s-v18-v1...:  403.35 MiB / 403.35 MiB  100.00% 70.39 M
+    > gcr.io/k8s-minikube/kicbase...:  453.90 MiB / 453.90 MiB  100.00% 51.02 M
+🔥  Creating docker container (CPUs=2, Memory=16300MB) ...
+🐳  Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+```
+
+5. Verify the installation:
+
+```powershell
+minikube status
+```
+
+6. Check MiniKube Cluster
+
+```powershell
+kubectl cluster-info
+kubectl get po -A
+```
+
+NOTE: if you have Kubernetes already installed in Docker-Desktop follow these instructions to set minikube configuration in docker cli
+
+How to set kubectl to use minikube configuration in docker cli?
+
+To set kubectl to use Minikube's configuration in Docker CLI, you can use the minikube kubectl command or set the Kubernetes context to Minikube. Here's how you can do it:
+
+To use minikube kubectl, you can run your commands like this:
+
+```powershell
+minikube kubectl -- get po -A
+```
+
+7. To set the Kubernetes context to Minikube, use the following command:
+
+```powershell
+kubectl config use-context minikube
+# TO CHANGE BACK TO docker-desktop
+kubectl config use-context docker-desktop
+```
+
+8. See dashboard
+
+```powershell
+minikube dashboard
+
+#Results
+W1126 12:11:45.207027    2436 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\jpcas\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
+🔌  Enabling dashboard ...
+    ▪ Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+    ▪ Using image docker.io/kubernetesui/dashboard:v2.7.0
+💡  Some dashboard features require the metrics-server addon. To enable all features please run:
+
+        minikube addons enable metrics-server
+
+
+🤔  Verifying dashboard health ...
+🚀  Launching proxy ...
+🤔  Verifying proxy health ...
+🎉  Opening http://127.0.0.1:63420/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
+```
+
+After running this command, kubectl commands will interact with the Minikube cluster.
+
+#### Stop and Delete MiniKube
+
+This should delete the .minikube and .kube directories usually under:
+C:\users\{user}\.minikube
+C:\users\{user}\.kube
+
+```powershell
+minikube stop
+minikube delete
+choco uninstall minikube
+choco uninstall kubectl
+```
