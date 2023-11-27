@@ -32,6 +32,12 @@ kubectl config use-context minikube
 kubectl config use-context docker-desktop
 ```
 
+- Verify the installation:
+
+```powershell
+minikube status
+```
+
 - See dashboard
 
 ```powershell
@@ -166,3 +172,6 @@ Containerize application:
   When exposing a web application to the internet, you should use an Ingress.
   [Kubernetes documentation of Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/#what-is-ingress)
 - Create ConfigMaps and Secrets for Microservice
+- Scale a Container Instance in Kubernetes
+- Kubernetes Deploy and Service with Minikube
+  ![Kubernetes Deploy and Service with Minikube](./resources/144-deploy-kubernetes-with-minikube.png)

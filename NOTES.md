@@ -775,3 +775,114 @@ var logLevel = Environment.GetEnvironmentVariable("LOG_LEVEL");
 var apiKey = Environment.GetEnvironmentVariable("API_KEY");
 
 So we can ConfigureLogging as per these logLevel and add api key into controllers.
+
+#### Scale a Container Instance in Kubernetes
+
+Start with watch pods
+kubectl get pod -w
+
+Use the kubectl scale command to update the deployment with a number of pods to create.
+kubectl scale --replicas=5 deployment/product
+
+> See watch - new 2 pod creating
+> product-deploy-5d5ccb7569-khfs6 0/1 ContainerCreating 0 0s
+> product-deploy-5d5ccb7569-qkrzn 0/1 ContainerCreating 0 0s
+
+> See latest pods
+
+    kubectl get pod
+
+> > if there's a failure Kubernetes will automatically restart the pods that were running before the failure.
+> > Let's see this resilience in action by deleting pod and then verifying that Kubernetes has restarted it.
+
+kubectl get pods
+product-deploy-5d5ccb7569-khfs6 0/1 ContainerCreating 0 0s
+product-deploy-5d5ccb7569-qkrzn 0/1 ContainerCreating 0 0s
+
+> Delete the pod by using the kubectl delete command.
+> kubectl delete pod product-5b6cc765c4-hjpx4
+
+> see
+> immediately stating the pod has been deleted.
+> kubectl get pods
+
+random string following the pod name has changed.
+Indicating the pod is a new instance.
+
+> > To scale the instance back down, run the following command.
+
+    kubectl scale --replicas=1 deployment/product
+
+See WATCH
+
+product-deploy-5d5ccb7569-j9gvl 0/1 Terminating 0 2m26s
+product-deploy-5d5ccb7569-khfs6 0/1 Terminating 0 78s
+product-deploy-5d5ccb7569-khfs6 0/1 Terminating 0 78s
+product-deploy-5d5ccb7569-khfs6 0/1 Terminating 0 78s
+product-deploy-5d5ccb7569-4dcr8 0/1 Terminating 0 2m27s
+product-deploy-5d5ccb7569-4dcr8 0/1 Terminating 0 2m27s
+product-deploy-5d5ccb7569-4dcr8 0/1 Terminating 0 2m27s
+product-deploy-5d5ccb7569-qkrzn 0/1 Terminating 0 78s
+product-deploy-5d5ccb7569-qkrzn 0/1 Terminating 0 79s
+
+Both of these approaches modify the running configuration
+manually run kubectl scale
+or change replica number.
+
+Solution: Auto-Scaling
+
+#### Kubernetes Deploy and Service with Minikube
+
+> Start
+> minikube start
+
+> Interact with your cluster
+> minikube dashboard
+
+> Deploy applications
+> Create a sample deployment and expose it on port 8080:
+> kubectl create deployment hello-minikube --image=jpcassidy/productservice:latest
+> kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+> Check service
+> The easiest way to access this service is to let minikube launch a web browser for you:
+
+    kubectl get services hello-minikube
+
+    minikube service hello-minikube
+
+SEE - WORKED !
+http://127.0.0.1:62162/api/products
+
+> Alternatively, use kubectl to forward the port:
+
+    kubectl port-forward service/hello-minikube 7080:8080
+
+Your application is now available at http://localhost:7080/.
+
+SEE- WORKED !
+http://localhost:7080/api/products
+
+#### Clean up Minikube resources
+
+> 1
+> Delete host address
+
+    C:\Windows\System32\drivers\etc\hosts
+
+> 2
+
+    kubectl delete deployment my-app
+    kubectl delete service my-app-service
+    kubectl delete pod my-app-pod
+    kubectl delete ingress my-app-ingress
+
+Since we can't just delete the pods, we have to delete the deployments.
+kubectl delete -f ./product.yaml
+
+> 3
+> Finally, stop Minikube with the command:
+
+    minikube stop
+
+## Helm Charts
