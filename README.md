@@ -122,3 +122,4 @@ Containerize application:
 - Create and Apply Deployment on Kubernetes k8s/product-deploy.yaml
 - Create and Apply a Service in Kubernetes k8s/product-service.yaml
   ![4 Types of Kubernetes Services](./resources/138_4-types-of-kubernetes-services.png)
+- Combined Way of Creating Deployment and Services for Microservices - product.yaml

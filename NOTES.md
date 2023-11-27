@@ -601,3 +601,22 @@ minikube service product-service
 🎉  Opening service default/product-service in default browser...
 ❗  Because you are using a Docker driver on windows, the terminal needs to be open to run it.
 ```
+
+#### Combined Way of Creating Deployment and Services for Microservices - product.yaml
+
+Apply the configuration
+
+```powershell
+kubectl apply -f .\product.yaml
+
+deployment.apps/product unchanged
+service/product-service unchanged
+```
+
+Delete and re-create your deployment and service objects with kubectl delete command
+
+```powershell
+kubectl delete -f .\product.yaml
+```
+
+#### Create Ingress for External Access of Microservice
