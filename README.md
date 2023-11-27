@@ -165,7 +165,4 @@ Containerize application:
 - Create Ingress for External Access of Microservice
   When exposing a web application to the internet, you should use an Ingress.
   [Kubernetes documentation of Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/#what-is-ingress)
-
-```
-
-```
+- Create ConfigMaps and Secrets for Microservice

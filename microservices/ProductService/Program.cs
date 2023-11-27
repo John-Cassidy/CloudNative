@@ -12,6 +12,10 @@ builder.WebHost.UseUrls(url);
 
 var app = builder.Build();
 
+// Configure logging
+var logLevel = Environment.GetEnvironmentVariable("LOG_LEVEL");
+var apiKey = Environment.GetEnvironmentVariable("API_KEY");
+
 // Seed the database with some data
 app.Services.SeedProducts();
 
