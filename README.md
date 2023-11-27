@@ -14,6 +14,45 @@ NOTE: Moving Forward, a branch will be created cooresponding to a lecture where 
 
 Example: lecture69 branch created to create microservices/ProductService.csproj
 
+## Minikube shortcuts
+
+Following shortcuts used to run instance of Minikube on Windows 11 with Docker Desktop and Kubernetes installed.
+
+- Start Minikube: This command starts a Minikube cluster container using the Docker driver.
+
+```powershell
+minikube start --driver=docker
+```
+
+- Set the Kubernetes context to Minikube or docker-desktop(kubernetes), use the following command:
+
+```powershell
+kubectl config use-context minikube
+# TO CHANGE BACK TO docker-desktop version of kubernetes
+kubectl config use-context docker-desktop
+```
+
+- See dashboard
+
+```powershell
+minikube dashboard
+```
+
+- Start/Stop Application using yaml file
+
+```powershell
+kubectl apply -f product.yaml
+kubectl delete -f product.yaml
+```
+
+- Access DNS address of application: http://product.local/api/products
+
+- Stop Minikube
+
+```powershell
+minikube stop
+```
+
 ## Pillar 1: Microservices
 
 [Martin Fowlers Microservices Article](https://martinfowler.com/articles/microservices.html)
@@ -123,3 +162,10 @@ Containerize application:
 - Create and Apply a Service in Kubernetes k8s/product-service.yaml
   ![4 Types of Kubernetes Services](./resources/138_4-types-of-kubernetes-services.png)
 - Combined Way of Creating Deployment and Services for Microservices - product.yaml
+- Create Ingress for External Access of Microservice
+  When exposing a web application to the internet, you should use an Ingress.
+  [Kubernetes documentation of Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/#what-is-ingress)
+
+```
+
+```

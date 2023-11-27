@@ -620,3 +620,65 @@ kubectl delete -f .\product.yaml
 ```
 
 #### Create Ingress for External Access of Microservice
+
+No longer need a service type of LoadBalancer since the service does not need to be accessible from the internet.
+It only needs to be accessible from the Ingress Controller (internal to the cluster)
+so we can change the service type to ClusterIP.
+
+Update your service.yaml file to look like this:
+
+    Remove type
+    Create Ingress into product.yaml file
+
+We have created Ingress object and referring to our service object which is product-service.
+and host address is product.local
+
+> So we should add this dns address into our host file.
+
+Update your hosts file (/etc/hosts on Linux and macOS or C:\Windows\System32\drivers\etc\hosts on Windows) to add the following line:
+
+First get IP of minikube
+minikube ip
+192.168.49.2
+
+> Add this line:
+
+Added by Minikube Custom Domain
+192.168.49.2 product.local
+
+> Active Ingress addons into our minikube installment.
+
+See all list
+minikube addons list
+
+Activate Ingress for our local minikube
+minikube addons enable ingress
+
+> Re-apply the app service manifest.
+> Re-create all objects:
+
+kubectl delete -f product.yaml
+kubectl apply -f product.yaml
+
+> See all
+> kubectl get all
+
+kubectl get ingress
+NAME CLASS HOSTS ADDRESS PORTS AGE
+product-ingress nginx product.local 192.168.49.2 80 3m29s
+
+> Access dns adress
+
+product.local
+
+> SEE RESULT:
+> http://product.local/api/products
+
+list ingress pods:
+kubectl get pods -n ingress-nginx
+
+describe pod:
+kubectl describe pod ingress-nginx-controller-7c6974c4d8-nlhqk -n ingress-nginx
+
+view logs from ingress controller:
+kubectl logs ingress-nginx-controller-7c6974c4d8-nlhqk -n ingress-nginx
