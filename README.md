@@ -97,3 +97,28 @@ Containerize application:
 - Pods, Deployments, Services, Incress, ConfigMaps, Secrets on Kubernetes using Minikube
 - Best Practice for Creating Deployment and Services for Microservices
 - Helm Charts - Managing Kubernetes Applications with Helm
+
+### Kubernetes Configuration Best Practices for Containers
+
+- By default, many applications bind to localhost (127.0.0.1) which makes them only accessible from within the container.
+- To be accessible from outside the container, your application should bind to 0.0.0.0.
+- To resolve the issue, update your application to bind to 0.0.0.0 instead of localhost or 127.0.0.1.
+- The process of changing the binding IP address will depend on your application and its configuration.
+- For example, in a .NET 7 web application using Kestrel, you can update the Program.cs file to bind to 0.0.0.0.
+  Any port which is listening on the default "0.0.0.0" address inside a container will be accessible from the network.
+
+[Configuration Best Practices of Kubernetes](https://kubernetes.io/docs/concepts/configuration/overview/)
+[Java, NodeJS containers not required, Asp.Net need explicit configure port on Dockerfile or code](https://github.com/dotnet/dotnet-docker/issues/3968)
+
+#### ASP.NET Container Expose Port - CONFIGURE TO LISTEN - 0.0.0.0:8080
+
+- Edit Program.cs
+- Build Docker Image
+- Run Docker Container
+- Test running docker container on local docker env
+- Tag Docker Image
+- Publish image to a Registry: Docker Hub
+- Create Pod Definition k8s/product-pod.yaml
+- Create and Apply Deployment on Kubernetes k8s/product-deploy.yaml
+- Create and Apply a Service in Kubernetes k8s/product-service.yaml
+  ![4 Types of Kubernetes Services](./resources/138_4-types-of-kubernetes-services.png)

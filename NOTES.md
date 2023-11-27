@@ -276,7 +276,7 @@ choco install minikube
 ```
 
 4. Start Minikube:
-   This command starts a Minikube cluster using the Docker driver.
+   This command starts a Minikube cluster container using the Docker driver.
 
 ```powershell
 minikube start --driver=docker
@@ -298,7 +298,13 @@ W1126 11:33:54.053549   15628 main.go:291] Unable to resolve the current Docker 
     ▪ Configuring RBAC rules ...
 🔗  Configuring bridge CNI (Container Networking Interface) ...
 🔎  Verifying Kubernetes components...
+    ▪ Using image docker.io/kubernetesui/dashboard:v2.7.0
+    ▪ Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
     ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+💡  Some dashboard features require the metrics-server addon. To enable all features please run:
+
+        minikube addons enable metrics-server
+
 🌟  Enabled addons: storage-provisioner, default-storageclass
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
 ```
@@ -370,4 +376,228 @@ minikube stop
 minikube delete
 choco uninstall minikube
 choco uninstall kubectl
+```
+
+## Kubernetes Configuration Best Practices for Containers
+
+### ASP.NET Container Expose Port - CONFIGURE TO LISTEN - 0.0.0.0:8080
+
+#### CONFIGURE Container Expose Port TO LISTEN - 0.0.0.0:8080
+
+- Edit Program.cs
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddSingleton<List<Product>>();
+
+	// Add the following for Kubernetes Deployment
+	var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+	var url = $"http://0.0.0.0:{port}";
+	builder.WebHost.UseUrls(url);
+
+var app = builder.Build();
+```
+
+- dockerfile > [add ENV varible into DockerFile](https://github.com/dotnet/dotnet-docker/issues/3968)
+
+```dockerfile
+"environmentVariables": {
+"ASPNETCORE_URLS": "https://+:443;http://+:80",
+"ASPNETCORE_HTTPS_PORT": "44360"
+},
+```
+
+- bash - [k8s deployment ENV variable inject](https://www.youtube.com/watch?v=63FLcPHUCPM)
+
+```bash
+kestrel**endpoints**http\_\_url
+http://0.0.0.0:80
+```
+
+#### Build and Deploy Docker Image to Docker Hub
+
+Build Image
+
+```powershell
+docker build -t productservice .
+```
+
+Run Docker Image
+You can run your app in a container using the following command:
+
+```powershell
+docker run -d -p 8080:80 --name productservicecontainer productservice
+```
+
+Hit Endpoint:
+http://localhost:8080/api/products
+
+Tag your Docker image with your Docker Hub username and the desired repository name:
+
+```powershell
+docker tag productservice jpcassidy/productservice:latest
+```
+
+Push the tagged Docker image to your Docker Hub repository:
+
+```powershell
+docker push jpcassidy/productservice:latest
+```
+
+### Create POD
+
+#### While you can create standalone Pods on Kubernetes, it is not recommended
+
+because Pods are the lowest-level abstraction in Kubernetes.
+▪ Lack of self-healing
+If a Pod fails, is terminated, or becomes unhealthy, it will not be automatically
+replaced. In contrast, higher-level abstractions like Deployments automatically
+manage the desired number of replicas and replace any failed Pods.
+▪ No scaling support
+Need to manually create and manage multiple Pod YAML files to scale your
+application. Deployments make scaling easy by allowing you to simply update
+the desired number of replicas.
+▪ Should make the Pods Resilient with Deployments
+
+#### Creating a Pod Definition product-pod.yaml
+
+product-pod.yaml
+
+> Open 2. terminal to watch created pods on K8s
+
+    kubectl get pods -w
+
+> Apply the configuration
+
+    kubectl apply -f product-pod.yaml
+
+> See Watch
+
+kubectl get pods -w
+NAME READY STATUS RESTARTS AGE
+my-app-pod 0/1 Pending 0 0s
+my-app-pod 0/1 Pending 0 0s
+my-app-pod 0/1 ContainerCreating 0  
+my-app-pod 1/1 Running 0
+
+> kubectl get pod
+> NAME READY STATUS RESTARTS AGE
+> my-app-pod 1/1 Running 0 63s
+
+> Expose the Pod
+
+    kubectl port-forward product-pod 8080:8080
+
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+
+You can now access the microservice at http://localhost:8080.
+
+> SEE DEPLOYED MICROSERVICE ON K8S WITH POD
+
+http://localhost:8080/api/products
+
+> Stop Pod
+
+    CTRL+C
+
+> Clean Up
+
+kubectl delete pod product-pod
+or
+kubectl delete -f .\product-pod.yaml
+
+#### Create and Apply Deployment on Kubernetes k8s/product-deploy.yaml
+
+product-deploy.yaml
+
+Open 2. terminal to watch created pods on K8s
+kubectl get pods -w
+
+> Apply the configuration
+
+    kubectl apply -f product-deploy.yaml
+
+> See Watch
+
+kubectl get pods -w
+NAME READY STATUS RESTARTS AGE
+my-app-pod 0/1 Pending 0 0s
+my-app-pod 0/1 Pending 0 0s
+my-app-pod 0/1 ContainerCreating 0  
+my-app-pod 1/1 Running 0
+
+> kubectl get pod
+> NAME READY STATUS RESTARTS AGE
+> my-app-pod 1/1 Running 0 63s
+
+> > Expose the Pod
+
+#### Create and Apply a Service in Kubernetes k8s/product-service.yaml
+
+roduct-service.yaml
+
+> Apply the configuration
+
+```powershell
+kubectl apply -f product-service.yaml
+```
+
+> See all
+
+```powershell
+kubectl get all
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/product-7b7c849898-chzr6   1/1     Running   0          17m
+pod/product-7b7c849898-hgkzm   1/1     Running   0          17m
+pod/product-7b7c849898-kwrs6   1/1     Running   0          17m
+
+NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/kubernetes        ClusterIP      10.96.0.1       <none>        443/TCP          22h
+service/product-service   LoadBalancer   10.98.131.168   <pending>     8080:31677/TCP   4m57s
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/product   3/3     3            3           17m
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/product-7b7c849898   3         3         3       17m
+```
+
+> Notice the service/product-service --type argument has a value of LoadBalancer.
+> This service type is implemented by the cloud-controller-manager which is part of the Kubernetes control plane.
+
+> Expose the Service
+> To invoke our pod with this service definition, we need a tunnel for K8s LoadBalancer IP.
+
+```powershell
+kubectl port-forward service/product-service 7080:8080
+```
+
+> SEE RESULT
+
+http://127.0.0.1:7080/api/products
+
+> Expose Service with Minikube
+
+First close port-forward service - CTRL+C
+Run the following command to expose the service with Minikube:
+
+```powershell
+minikube service product-service
+
+|-----------|-----------------|-------------|---------------------------|
+| NAMESPACE |      NAME       | TARGET PORT |            URL            |
+|-----------|-----------------|-------------|---------------------------|
+| default   | product-service |        8080 | http://192.168.49.2:31677 |
+|-----------|-----------------|-------------|---------------------------|
+🏃  Starting tunnel for service product-service.
+|-----------|-----------------|-------------|------------------------|
+| NAMESPACE |      NAME       | TARGET PORT |          URL           |
+|-----------|-----------------|-------------|------------------------|
+| default   | product-service |             | http://127.0.0.1:53668 |
+|-----------|-----------------|-------------|------------------------|
+🎉  Opening service default/product-service in default browser...
+❗  Because you are using a Docker driver on windows, the terminal needs to be open to run it.
 ```
