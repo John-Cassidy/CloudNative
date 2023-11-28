@@ -886,3 +886,19 @@ kubectl delete -f ./product.yaml
     minikube stop
 
 ## Helm Charts
+
+### Install Helm
+
+```powershell
+choco install kubernetes-helm
+The install of kubernetes-helm was successful.
+  Software installed to 'C:\ProgramData\chocolatey\lib\kubernetes-helm\tools'
+```
+
+Optional Instructions - Download and install the Helm CLI
+[Youtube Video - Install Helm On Windows](https://www.youtube.com/watch?v=2fop7rvHrac)
+▪ https://helm.sh/docs/intro/install/
+▪ https://github.com/helm/helm/releases
+▪ Download and un-zip
+▪ Create C:/tools folder
+▪ Add path into ENV variables
