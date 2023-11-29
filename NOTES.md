@@ -902,3 +902,143 @@ Optional Instructions - Download and install the Helm CLI
 ▪ Download and un-zip
 ▪ Create C:/tools folder
 ▪ Add path into ENV variables
+
+### Create Helm Chart for ProductService
+
+#### Hands-on Lab: Deploy Product Microservices with Helm Charts
+
+Create a simple Helm chart for the Product microservice we previously deployed to Kubernetes.
+
+NOTE: this will create a helm folder in ~\orchestrators\helm\ folder
+
+> Create a new Helm chart:
+> Run the following command to create a new Helm chart named productservice:
+> helm create productservice
+
+This command will generate a new directory called productservice with the basic structure of a Helm chart.
+
+> See folder structure
+
+helm/productservice
+
+    see values.yaml, Chart.yaml ...
+
+> > Update the chart metadata:
+> > Open the Chart.yaml file in the productservice directory,
+> > and update it with the relevant information about Product microservice:
+
+apiVersion: v2
+name: product-app
+description: A Helm chart for Product microservice
+type: application
+version: 0.1.0
+appVersion: 1.0.0
+
+> > Examine Generated files:
+
+Charts.yaml
+Values.yaml
+Templates folder
+
+> > Update the default values:
+> > Open the values.yaml file in the productservice directory,
+> > and set the default values for the deployment, service, and container image:
+
+replicaCount: 3
+
+image:
+repository: mehmetozkaya/productservice
+pullPolicy: IfNotPresent
+
+#### Overrides the image tag whose default is the chart appVersion.
+
+tag: "latest"
+...
+service:
+type: LoadBalancer
+port: 8080
+targetPort: 8080
+
+...
+These values are automatically map the deployment and service yaml files under templates folder.
+
+> > See how organize template parameters:
+> > image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+> > imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+> > Update the templates:
+> > goto template file and see the content that will replace.
+
+1 - service.yaml file
+put targetPort: {{ .Values.service.targetPort }}
+
+ports: - port: {{ .Values.service.port }}
+targetPort: {{ .Values.service.targetPort }}
+protocol: TCP
+
+2- remove health checks
+since we expose microservices
+api/products
+we can remove or change this
+otherwise our pods wont be start due to not become healty state
+
+> The idea is that when we generate k8s files
+
+    that we already developed before.
+
+see k8s folder
+see deployment and service.yaml file
+
+> > Install the chart:
+> > Run the command to install the Helm chart into your Kubernetes cluster:
+NOTE: run command from: ~/helm/ folder
+
+```powershell
+helm install productservice-release ./productservice
+NAME: productservice-release
+LAST DEPLOYED: Wed Nov 29 09:31:00 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace default svc -w productservice-release'
+  export SERVICE_IP=$(kubectl get svc --namespace default productservice-release --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+  echo http://$SERVICE_IP:8080
+  ```
+
+> > Verify the deployment:
+    helm list
+
+You should see your productservice-release in the list of deployed releases.
+
+Check deployed resources:
+kubectl get svc,deploy,pods
+kubectl get all
+
+> > Access the application:
+> > To access the application, we'll need the create tunnel of the service with using kubectl port-forward command or minikube service command.
+
+Port fwd
+minikube service productservice-release
+
+See products url
+http://127.0.0.1:50643/api/products
+
+> > Alternatively, Access the application by using kubectl to forward the port:
+
+    kubectl port-forward service/productservice-release 7080:8080
+
+Your application is now available at http://localhost:7080/.
+
+See products url
+http://localhost:7080/api/products
+
+> Uninstall the chart:
+> When you are done testing your application, you can uninstall the release by running:
+
+    helm uninstall productservice-release
+
+See pods removed:
+kubectl get all

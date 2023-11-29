@@ -282,4 +282,13 @@ Create your own Helm Chart
 Learn how to package and distribute a Helm Chart
 Explore how to manage Helm releases, including upgrades and rollbacks
 
-#### Helm Charts
+#### Install Helm
+
+See NOTES.md file for information on installing Helm
+
+### Create Helm Chart for ProductService
+
+See NOTES.md for information on creating helm chart for ProductService and running in either:
+
+- Docker Desktop/kubernetes
+- MiniKube

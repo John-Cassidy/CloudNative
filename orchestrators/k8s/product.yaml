@@ -1,81 +1,95 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product
+  name: {{ include "product-chart.fullname" . }}
+  labels:
+    {{- include "product-chart.labels" . | nindent 4 }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: product
+      {{- include "product-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: product
+        {{- include "product-chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: product
-          image: jpcassidy/productservice:latest
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.containerPort }}
           env:
             - name: LOG_LEVEL
               valueFrom:
                 configMapKeyRef:
-                  name: log-level-configmap
+                  name: {{ include "product-chart.fullname" . }}-configmap
                   key: log_level
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: api-key-secret
+                  name: {{ include "product-chart.fullname" . }}-secret
                   key: api_key
           resources:
             limits:
-              cpu: '0.5'
-              memory: '512Mi'
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
             requests:
-              cpu: '0.1'
-              memory: '256Mi'
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
 ---
+# FILEPATH: /c:/DEV/github.com/CloudNative/orchestrators/k8s/product-chart/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: product-service
+  name: {{ include "product-chart.fullname" . }}-service
+  labels:
+    {{- include "product-chart.labels" . | nindent 4 }}
 spec:
   selector:
-    app: product
+    {{- include "product-chart.selectorLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
 ---
+# FILEPATH: /c:/DEV/github.com/CloudNative/orchestrators/k8s/product-chart/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: product-ingress
+  name: {{ include "product-chart.fullname" . }}-ingress
+  labels:
+    {{- include "product-chart.labels" . | nindent 4 }}
 spec:
   rules:
-    - host: product.local
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: '/api/products'
-            pathType: Prefix
+          - path: '{{ .Values.ingress.path }}'
+            pathType: {{ .Values.ingress.pathType }}
             backend:
               service:
-                name: product-service
+                name: {{ include "product-chart.fullname" . }}-service
                 port:
-                  number: 8080
+                  number: {{ .Values.service.port }}
 ---
+# FILEPATH: /c:/DEV/github.com/CloudNative/orchestrators/k8s/product-chart/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: log-level-configmap
+  name: {{ include "product-chart.fullname" . }}-configmap
+  labels:
+    {{- include "product-chart.labels" . | nindent 4 }}
 data:
-  log_level: 'Information'
+  log_level: {{ .Values.configMap.logLevel }}
 ---
+# FILEPATH: /c:/DEV/github.com/CloudNative/orchestrators/k8s/product-chart/templates/secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: api-key-secret
+  name: {{ include "product-chart.fullname" . }}-secret
+  labels:
+    {{- include "product-chart.labels" . | nindent 4 }}
 type: Opaque
 data:
-  api_key: cHJvZHVjdC1hcGkta2V5
+  api_key: {{ .Values.secret.apiKey }}
