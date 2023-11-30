@@ -1042,3 +1042,7 @@ http://localhost:7080/api/products
 
 See pods removed:
 kubectl get all
+
+## Pillar 4: Deploy Microservices to Kubernetes with Service Mesh Istio and Envoy
+
+## Pillar 5: TEST

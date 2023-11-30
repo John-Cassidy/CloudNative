@@ -201,7 +201,7 @@ Containerize application:
 
 ### Helm: Managing Kubernetes Applications with Helm
 
-#### What is Helm and Helm Charts ?
+#### What is Helm and Helm Charts?
 
 Helm is a package manager for Kubernetes (K8s) that simplifies the deployment, scaling, and management of applications. It provides a way to define, install, and upgrade complex Kubernetes applications.
 
@@ -292,3 +292,190 @@ See NOTES.md for information on creating helm chart for ProductService and runni
 
 - Docker Desktop/kubernetes
 - MiniKube
+
+## Pillar 4: Cloud-Native Communications
+
+- What are Cloud-Native Communications?
+- How microservices communicate in Cloud-Native environments?
+- What are patterns & best practices of communications in CN environments?
+- API Gateways, Sidecar and Service Mesh Pattern
+- Design & Implement our E-Commerce application with Communication Tools
+
+### What are Cloud-Native Communications?
+
+#### 12-Factor App – Cloud-Native Communications
+
+- Processes: Emphasizes that applications should be stateless and share nothing. Encourages apps to use external services for sharing state, which often involves communication between services.
+- Port binding: Enables apps to be deployed and scaled independently. By binding to a specific port, an app can expose its functionality as a service, allowing other services to communicate with it without being tightly coupled.
+- Concurrency: Promotes scaling applications by running multiple processes concurrently. Communication and coordination between these processes and services become critical.
+- Disposability: Fast startup and graceful shutdown for app processes. Services may need to communicate with other components during startup or shutdown to coordinate their actions or update their status.
+- Service Mesh: Dedicated infrastructure layer handles service-to-service communication in a cloud-native env. It provides features like load balancing, service discovery, observability, and security.
+- Service Discovery: Services need to dynamically discover and communicate with each other. Help to locate and connect to other services within the system.
+- API Gateway: Entry point for external requests to the microservices. It routes the requests to appropriate services, handles load balancing, and provides additional functionalities like auth and rate limiting.
+- Messaging Systems: Async communication between microservices by using message queues that decouples services, allows to evolve independently and ensures resilience against temporary service failures.
+
+### How microservices communicate in Cloud-Native environments?
+
+Microservices communication types:
+
+- Synchronous communications: Request/Response
+
+Synchronous communication is using HTTP or gRPC protocol for returning synchronous response. 
+The client sends a request and waits for a response from the service.
+
+- Asynchronous communications: Message broker event buses
+
+The client sends a request but it doesn't wait for a response from the service.
+The client should not have blocked a thread while waiting for a response. 
+AMQP (Advanced Message Queuing Protocol)
+Using AMQP protocols, the client sends the message with using message broker systems like Kafka and RabbitMQ queue.
+The message producer does not wait for a response.
+Message consume from the subscriber systems in async way, and no one waiting for response suddenly.
+Asynchronous communication also divided by 2:
+
+- one-to-one(queue)
+
+In one-to-one(queue) implementation there is a single producer and single receiver.
+Command Patterns offers to receive one queue object and after that execute the command with incoming message. 
+This process restarts with receiving new command queue item.
+
+- one-to-many (topic)
+
+In one-to-many (topic) implementation has Multiple receivers. Each request can be processed by zero to multiple receivers. 
+Event-bus or message broker system is publishing events between multiple microservices and communication provide with subscribing these events in an async way.
+Publish/subscribe mechanism used in Event-driven microservices architecture
+
+Microservices Communication Styles
+
+- Request/response communication with HTTP and REST Protocol (extends gRPC and GraphQL)
+gRPC protocol communication mechanisms to provide high performance and low latency
+- Push and real-time communication based on HTTP, WebSocket Protocol
+Use case about real-time and one-to-many communication like chat application, use Push Model with HTTP and WebSocket Protocols.
+Build real-time two-way communication applications, such as chat apps and streaming dashboards like the score of a ports game, with WebSocket APIs.
+The client and the server can both send messages to each other at any time. Backend servers can easily push data to connected users and devices.
+- Pull communication based on HTTP and AMQP (short polling - long polling)
+Also called "Polling" and it's basically the same as refreshing your mail inbox every 5 minutes to check for new mail. It is a call and ask model. This model is become a waste of bandwidth if there are no new messages and responses comes from the server. Opening and closing connections is expensive. And we can say that this model doesn't scale well.
+- Event-Driven communication with Publish/Subscribe Mode
+
+### What are patterns & best practices of communications in Cloud-Native environments?
+
+#### Microservices Synchronous Communications and Best Practices
+
+- The client sends a request with using http protocols and waits for a response from the service.
+- The synchronous communication protocols can be HTTP or HTTPS. 
+- Request/response communication with HTTP and REST Protocol (extends gRPC and GraphQL)
+- REST HTTP APIs when exposing from microservices
+- gRPC APIs when communicate internal microservices
+- GraphQL APIs when structured flexible data in microservices
+- WebSocket APIs when real-time bi-directional communication
+
+#### 2 Main Approaches for Public and Backend APIs
+
+- RESTful API Design over HTTP using JSON
+- gRPC binary protocol API Design
+
+### API Gateways, Sidecar and Service Mesh Pattern
+
+- API Gateway is a single point of entry to the client applications, sits between the client and multiple backend.
+- Similar to the facade pattern from object-oriented design, but it is a distributed system reverse proxy or gateway routing for using in synchronous communication.
+- The pattern provides a reverse proxy to redirect or route requests to your internal microservices endpoints.
+- API Gateway provides a single endpoint for the client applications, and it maps the requests to internal microservices.
+- Provide cross-cutting concerns like authentication, SSL termination, and cache.
+- Best practices is splitting the API Gateway in multiple services or multiple smaller API Gateways: BFF-Backend-for-Frontend Pattern.
+- Should segregated based on business boundaries of the client applications.
+
+#### Main Features of API Gateway Pattern
+
+- Reverse Proxy and Gateway Routing
+
+Reverse proxy to redirect requests to the endpoints of the internal microservices. Using Layer 7 routing for 
+HTTP requests for redirections. Decouple client applications from the internal microservices. Separating
+responsibilities on network layer and abstracting internal operations. 
+
+- Requests Aggregation and Gateway Aggregation
+
+Aggregate multiple internal microservices into a single client request. Client application sends a single request 
+to the API Gateway and it dispatches several requests to the internal microservices and then aggregates the 
+results and sends back to the client application in 1 single response. Reduce chattiness communication.
+
+- Cross-cutting Concerns and Gateway Offloading
+
+Best practice to implement cross-cutting functionality on the API Gateways. Cross-cutting functionalities can be;
+Authentication and authorization, Service discovery, Response caching, Retry policies, Circuit Breaker, Rate 
+limiting and throttling, Load balancing, Logging, tracing, IP allowlisting
+
+#### Service Registry/Discovery Pattern
+
+![What is Service Discovery Pattern?](./resources/362-service-discovery-pattern.png)
+
+![How Does Service Discovery Work?](./resources/363-how-service-discovery-work.png)
+
+#### Sidecar Pattern
+
+![Sidecar Pattern](./resources/364-sidecar-pattern.png)
+
+##### Drawbacks of Sidecar Pattern
+
+- Increased complexity - Adding an additional layer of complexity to your deployment, more difficult to understand and troubleshoot issues that rise.
+- Increased resource usage - Running an additional container in a pod will increase the resource usage of the pod. 
+- Decreased performance - Pod can potentially decrease the performance of the pod, as the sidecar container will be competing for resources with the main container.
+- Limited flexibility - Can be inflexible in some cases, as it requires that the main container and the sidecar container run in the same pod.
+
+##### When to use Sidecar Pattern
+
+- When you want to add functionality to an existing container image
+- When you want to decouple the main container from the additional functionality
+- When you want to run multiple containers in a pod that need to communicate with each other
+- When you want to add common functionality to multiple microservices
+
+#### Service Mesh Pattern
+
+![Service Mesh Pattern Communication](./resources/370-service-mesh-communication.png)
+
+##### What is Service Mesh Pattern?
+
+- Service mesh pattern is managing the communication between microservices in a distributed system. 
+- Designed to provide a uniform way to route traffic between microservices, handle load balancing, and monitor the healths.
+- Consists of a set of proxy servers (sidecars) that are deployed alongside the microservices. Proxy servers handle the communication between the microservices.
+- Responsible for tasks such as routing requests, load balancing, and monitoring the health of the system.
+- Abstract away the complexities of managing communication between microservices. 
+- Instead of having to manage these details at the application level, use the service mesh to handle them automatically. 
+- Popular Service mesh implementations, including Istio and Linkerd, set up and manage a service mesh in a Kubernetes cluster.
+
+##### When to use Service Mesh Pattern
+
+- When you want to abstract away the complexities of managing communication between microservices.
+- When you want to centralize the management of communication between microservices.
+- When you want to add features such as load balancing, trafficmanagement, and monitoring to your microservices.
+- Using a service mesh, can add these features to your microservices without having to modify the microservices themselves.
+- Service mesh pattern is a useful tool for managing the communication between microservices in a distributed system. 
+- Build and maintain complex microservices-based systems by abstracting away the complexities of managing communication between the microservices.
+
+##### Service Mesh Communication
+
+- Minimizing inter-service communication is ideal.
+- Microservice communication: synchronous HTTP and gRPC communication and asynchronous messaging. 
+- Service mesh is a dedicated infrastructure layer that manages communication between microservices. 
+- Secure the interactions between services without adding complexity to the individual microservices themselves.
+- Built-in capabilities for service-to-service communication, resiliency, and handling cross-cutting concerns.
+- Communication concerns is moved out of the microservices and into the service mesh layer. 
+- This abstraction allows communication to be handled independently from your microservices.
+- Support for service discovery and load balancing. Handles traffic management, communication, and networking concerns.
+
+### Design & Implement our E-Commerce application with Communication Tools
+
+Communication Tools
+
+- Service Proxy (envoy, nginx, haproxy)
+- API Gateway (Kong, krakend, kubeGateway)
+- Service Meshes (istio, linkerd, kuma)
+
+AWS Service Proxy - AWS App Mesh is a service mesh that uses Envoy as a proxy, providing application-level networking for microservices on AWS.
+AWS API Gateway - AWS API Gateway is a fully managed service for creating, publishing, and managing APIs. It handles features like authentication, rate limiting, and caching.
+AWS Service Meshes - AWS App Mesh can also be considered a managed service mesh, as it provides observability, traffic control, and security for microservices running on AWS.
+Azure Service Proxy - Azure API Management can act as a service proxy, providing API gateway functionality with load balancing, rate limiting, and caching.
+Azure API Gateway - Azure API Management is a fully managed service for creating, publishing, and managing APIs. It provides features like authentication, rate limiting, caching, and monitoring.
+Azure Service Meshes - Azure Service Fabric Mesh is a fully managed service mesh for building and deploying microservices. It provides features like service discovery, load balancing, and communication security. Additionally, AKS supports the integration of Istio, Linkerd, and other service meshes.
+Istio dominates Service meshes - Service meshes provide service discovery, load balancing, timeouts, and retries, and allow administrators to manage the cluster's security and monitor its performance.
+
+## Pillar 5: 
