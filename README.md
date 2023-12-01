@@ -464,18 +464,127 @@ limiting and throttling, Load balancing, Logging, tracing, IP allowlisting
 
 ### Design & Implement our E-Commerce application with Communication Tools
 
-Communication Tools
+#### Communication Tools
 
 - Service Proxy (envoy, nginx, haproxy)
 - API Gateway (Kong, krakend, kubeGateway)
 - Service Meshes (istio, linkerd, kuma)
 
+#### Examples
+
 AWS Service Proxy - AWS App Mesh is a service mesh that uses Envoy as a proxy, providing application-level networking for microservices on AWS.
+
 AWS API Gateway - AWS API Gateway is a fully managed service for creating, publishing, and managing APIs. It handles features like authentication, rate limiting, and caching.
+
 AWS Service Meshes - AWS App Mesh can also be considered a managed service mesh, as it provides observability, traffic control, and security for microservices running on AWS.
+
 Azure Service Proxy - Azure API Management can act as a service proxy, providing API gateway functionality with load balancing, rate limiting, and caching.
+
 Azure API Gateway - Azure API Management is a fully managed service for creating, publishing, and managing APIs. It provides features like authentication, rate limiting, caching, and monitoring.
+
 Azure Service Meshes - Azure Service Fabric Mesh is a fully managed service mesh for building and deploying microservices. It provides features like service discovery, load balancing, and communication security. Additionally, AKS supports the integration of Istio, Linkerd, and other service meshes.
+
 Istio dominates Service meshes - Service meshes provide service discovery, load balancing, timeouts, and retries, and allow administrators to manage the cluster's security and monitor its performance.
 
-## Pillar 5: 
+#### Service Mesh
+
+Microservices Architecture
+
+- App should be split into small, independent, and loosely coupled services, each responsible for a specific functionality.
+- Allow to develop, deploy, and scale these services independently.
+
+Containerization
+
+- Package your microservices into lightweight containers, which can be easily deployed and managed in a cloud-native environment.
+
+Container Orchestration
+
+- Kubernetes to manage the deployment, scaling, and operation of your containerized microservices. Kubernetes provides features like self-healing, load balancing, and rolling updates.
+
+Istio Service Mesh
+
+- Implement Istio as a service mesh to provide a uniform way to connect, secure, control, and observe microservices. Istio with Envoy proxies, handle traffic management, security, and observability without modifying app code.
+
+#### Ingress
+
+Traffic Management
+
+- Use Istio's traffic management capabilities: load balancing, request routing, and fault injection, to ensure services are highly available and resilient.
+
+Security
+
+- Leverage Istio's built-in security features, including mutual TLS, authorization policies, and authentication, to secure communication between microservices.
+
+Observability
+
+- Utilize Istio's observability features, like distributed tracing, monitoring, and logging, to gain insights into application's performance and identify issues.
+
+Ingress Gateway
+
+- Use an Istio ingress gateway to manage incoming traffic to application, enabling to define routing rules and expose services to the outside world.
+
+#### Design Serverless E-commerce Microservices Architecture with AWS API Gateway, AWS App Mesh
+
+![Design with AWS API Gateway, AWS App Mesh](./resources/385-AWS-serverless-design.png)
+
+[GitHub Repo](https://github.com/awsrun/aws-microservices)
+
+[Udemy Course](https://www.udemy.com/course/aws-serverless-microservices-lambda-eventbridge-sqs-apigateway/)
+
+##### Managed API Gateway
+
+Microservices Architecture
+
+- Design app as a collection of small, independent, and loosely coupled microservices, each responsible for a specific functionality.
+
+Serverless Compute
+
+- Use serverless compute services like AWS Lambda, Azure Functions, or Google Cloud Functions to host microservices.
+- Automatically manage the scaling, patching, and capacity planning of microservices, allows to focus on application logic.
+
+Managed API Gateway
+
+- Utilize managed API Gateway services: Amazon API Gateway, Azure API Management or Google Cloud API Gateway to expose microservices.
+- Provide features like request routing, authentication, caching, throttling, and monitoring.
+
+Managed Service Mesh
+
+- Use managed service meshes like AWS App Mesh, Google Cloud Traffic Director, or Azure
+
+Service Mesh
+
+- Integrate with serverless compute services and provide features like traffic routing, load balancing, and end-to-end encryption.
+
+##### Observability
+
+Event-driven Architecture
+
+- Design microservices to be event-driven and use managed services like Amazon EventBridge, Azure Event Grid, or Google Cloud Pub/Sub for asynchronous communication between services.
+
+Data Storage
+
+- Use managed serverless storage services: Amazon DynamoDB, Azure Cosmos DB, or Google Cloud Firestore to store application data.
+- Provide low-latency, scalable, and fully managed data storage options.
+
+Security
+
+- Leverage managed Identity and Access Management (IAM) services provided by the cloud providers to control access to microservices and ensure secure communication.
+
+Observability
+
+- Use managed monitoring, logging, and tracing services: Amazon CloudWatch, Azure Monitor, or Google Cloud Operations Suite to gain insights into application's performance and troubleshoot issues.
+
+#### Deploy Microservices to Kubernetes with Service Mesh Istio and Envoy
+
+![Service Mesh Istio and Envoy](./resources/389-ISTIO-ENVOY.png)
+
+![Deploy Microservices to Kubernetes with Service Mesh Istio and Envoy](./resources/390-ISTIO-ENVOY.png)
+
+## Pillar 5: Backing Services - Data Management, Caching, Message Brokers
+
+- What are Cloud-Native Backing Services ?
+- Which Backing Services for Cloud-Native Microservices ?
+- How microservices use Backing Services in Cloud-Native environments ?
+- What are patterns & best practices of Backing Services in Cloud-native apps ?
+- Implement Hands-on Development of Backing Services in Cloud-native microservices
+

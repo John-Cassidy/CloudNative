@@ -1045,4 +1045,275 @@ kubectl get all
 
 ## Pillar 4: Deploy Microservices to Kubernetes with Service Mesh Istio and Envoy
 
-## Pillar 5: TEST
+- Getting Started with Istio and Envoy with Minikube
+- Download and install Istio Service Mesh onto Minikube K8s cluster 
+- Deploy the microservices application on Kubernetes with Istio Service Mesh 
+- Open the application to outside traffic with Istio Ingress Gateway 
+- Deploy the Kiali dashboard, along with Prometheus, Grafana, and Jaeger
+
+![Service Mesh Istio and Envoy](./resources/389-ISTIO-ENVOY.png)
+
+![Deploy Microservices to Kubernetes with Service Mesh Istio and Envoy](./resources/390-ISTIO-ENVOY.png)
+
+### Download and Install Istio Service Mesh onto Minikube K8s cluster
+
+----
+>1
+Go to the Istio release page to download the installation file for your OS, 
+	or download and extract the latest release automatically (Linux or macOS):
+
+	https://istio.io/latest/docs/setup/getting-started/#download
+	https://github.com/istio/istio/releases	
+
+	istio-1.xx-win.zip	
+
+>2
+Move to the Istio package directory. 
+For example, if the package is istio-1.17.2:
+
+$ cd istio-1.17.2
+
+The installation directory contains:
+
+Sample applications in samples/
+The istioctl client binary in the bin/ directory.
+
+C:\Users\PC\Downloads\istio-1.17.2-win\istio-1.17.2
+
+>3
+Add the istioctl client to your path (Linux or macOS):
+
+$ export PATH=$PWD/bin:$PATH
+
+Windows
+
+Move 
+	C:\Users\PC\Downloads\istioctl-1.17.2-win
+		istioctl.exe
+
+to our
+	C:/tools folder
+		istioctl.exe
+
+>
+Open wt
+	istioctl
+
+### Install Istio Service Mesh
+
+----
+>0
+Make sure that you have installed minikube and kubectl.
+
+Start Docker
+minikube start
+
+kubectl get pod
+kubectl get all
+
+>1
+For this installation, we use the demo configuration profile. 
+
+Run Command:
+	istioctl install --set profile=demo -y
+
+>2
+Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
+
+Run Command:
+	kubectl label namespace default istio-injection=enabled
+
+namespace/default labeled
+
+### Deploy the Microservices Application
+
+----
+>1
+Deploy the Bookinfo sample application:
+
+Run Command:
+	kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+
+	kubectl apply -f .\bookinfo.yaml
+
+>2
+The application will start. 
+As each pod becomes ready, the Istio sidecar will be deployed along with it.
+
+Run Command:
+	kubectl get services
+
+and
+
+Run Command:
+	kubectl get pods
+
+>3
+Verify everything is working correctly up to this point. 
+Run this command to see if the app is running inside the cluster and serving HTML pages by checking for the page title in the response:
+
+bash script
+
+$ kubectl exec "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl -sS productpage:9080/productpage | grep -o "<title>.*</title>"
+
+```html
+<title>Simple Bookstore App</title>
+```
+
+### Open the Application to Outside Traffic
+
+----
+>1
+Create file bookinfo-gateway.yaml
+
+copy-paste
+	https://raw.githubusercontent.com/istio/istio/release-1.17/samples/bookinfo/networking/bookinfo-gateway.yaml
+
+>2
+Associate this application with the Istio gateway:
+
+Run Command:
+kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+
+kubectl apply -f .\bookinfo-gateway.yaml
+
+gateway.networking.istio.io/bookinfo-gateway created
+virtualservice.networking.istio.io/bookinfo created
+
+>3
+Ensure that there are no issues with the configuration:
+
+```bash
+istioctl analyze
+✔ No validation issues found when analyzing namespace: default.
+```
+
+>4
+Determining the ingress IP and ports
+
+Run this command in a new terminal window to start a Minikube tunnel that sends traffic to your Istio Ingress Gateway. 
+This will provide an external load balancer, EXTERNAL-IP, for service/istio-ingressgateway.
+
+Run Command:
+minikube tunnel
+
+>5
+Set the ingress host and ports:
+Set the INGRESS_HOST and INGRESS_PORT variables for accessing the gateway. Use the tabs to choose the instructions for your chosen platform:
+Open git bash command and check below parameters:
+
+export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
+
+Ensure an IP address and ports were successfully assigned to each environment variable:
+
+echo "$INGRESS_HOST"
+127.0.0.1
+
+echo "$INGRESS_PORT"
+80
+
+echo "$SECURE_INGRESS_PORT"
+443
+
+
+>6
+Set GATEWAY_URL:
+
+export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
+
+Ensure an IP address and port were successfully assigned to the environment variable:
+
+echo "$GATEWAY_URL"
+192.168.99.100:32194
+
+127.0.0.1:80
+
+>7
+Verify external access
+Confirm that the Bookinfo application is accessible from outside.
+Run the following command to retrieve the external address of the Bookinfo application.
+
+echo "http://$GATEWAY_URL/productpage"
+
+Paste the output from the previous command into your web browser.
+open chrome
+	http://127.0.0.1/productpage
+
+See page came
+	The Comedy of Errors !
+
+### View the dashboard - Deploy the Kiali dashboard, along with Prometheus, Grafana, and Jaeger
+----
+>1
+We should download full folder on github, we can also do copy paste one-by-one all folders, but there is a short way to implement all folder.
+
+Downloaded path:
+	https://github.com/istio/istio/tree/release-1.17/samples/addons
+
+Download folder:
+	https://download-directory.github.io/
+
+>2
+create "addons" folder under lecture folder  on vscode
+
+copy paste all items into github to vs code folder
+	https://github.com/istio/istio/tree/release-1.17/samples/addons
+
+	kiali.yaml
+	prometheus.yaml
+	jaeger.yaml
+	grafana.yaml
+
+> Read
+	Readme File
+
+>
+goto path
+	copy and paste addons folder of k8s
+
+>
+Examine files
+	kiali.yaml
+	prometheus.yaml
+	jaeger.yaml
+	grafana.yaml
+
+So now we are ready to apply this whole folder into our minikube kubernetes cluster over the istio service mesh.
+
+>>
+Install Kiali and the other addons and wait for them to be deployed.
+
+Run Command:
+kubectl apply -f .\addons\
+kubectl rollout status deployment/kiali -n istio-system
+
+Waiting for deployment "kiali" rollout to finish: 0 of 1 updated replicas are available...
+deployment "kiali" successfully rolled out
+
+>
+Access the Kiali dashboard.
+
+Run Command:
+istioctl dashboard kiali
+
+### Analysis the Dashboard
+----
+>
+Open new wt:
+minikube tunnel
+
+http://127.0.0.1/productpage
+
+>
+Open new wt:
+istioctl dashboard kiali
+
+>
+To send a 100 requests to the productpage service, use the following command:
+
+goto bash script
+for i in $(seq 1 100); do curl -s -o /dev/null "http://http://127.0.0.1/productpage"; done
+
+## Pillar 5: Backing Services - Data Management, Caching, Message Brokers
