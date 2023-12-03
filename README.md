@@ -582,9 +582,117 @@ Observability
 
 ## Pillar 5: Backing Services - Data Management, Caching, Message Brokers
 
-- What are Cloud-Native Backing Services ?
-- Which Backing Services for Cloud-Native Microservices ?
-- How microservices use Backing Services in Cloud-Native environments ?
-- What are patterns & best practices of Backing Services in Cloud-native apps ?
+- What are Cloud-Native Backing Services?
+- Which Backing Services for Cloud-Native Microservices?
+- How microservices use Backing Services in Cloud-Native environments?
+- What are patterns & best practices of Backing Services in Cloud-native apps?
 - Implement Hands-on Development of Backing Services in Cloud-native microservices
 
+### Backing Services
+
+- K8s Databases (MySQL, Postgres), Serverless Databases
+- File storage (NFS, FTP, Cloud Filestore)
+- Message Brokers, Enterprise Message Queues, (Kafka, EventBridge)
+- Event Streaming Services
+- Object Storage: S3, Azure Blob Storage
+- AUthenticcation, Authorization Services
+- Security Identity Management: AWS IAM, Azure AD
+- API Gateways
+- Service Meshes
+- Distributed Caches, Serverless Caching
+- Monitoring and Analytic tools
+- Security Identity Services
+- Logging services (syslog endpoints, Cloud Logging)
+- Search Analytics
+
+Distributed Databases
+
+- Popular databases used in cloud-native apps include relational databases (PostgreSQL, MySQL), NoSQL databases (MongoDB, Cassandra), and in-memory databases (Redis)
+- Managed relational databases like Amazon RDS and Google Cloud SQL
+- NoSQL databases like Amazon DynamoDB Azure Cosmos DB, and Google Cloud Firestore
+- NewSQL or Cloud-native Databases are modern relational database management systems that aim to combine the best features of traditional SQL databases and NoSQL databases. Examples are:  Google Spanner, CockroachDB, VoltDB, TiDB and Vitess
+
+Messaging and Eventing Systems
+
+- Enable asynchronous communication between microservices, allowing to exchange messages or events. This improves scalability and decouples microservices
+- Message Brokers such as Apache Kafka, NATS, and RabbitMQ are popular for building event-driven architectures in cloud-native applications
+- Cloud Message Brokers - Amazon SQS/SNS, EventBridgeGoogle Cloud Pub/Sub, and Azure Service Bus, Azure Event Hubs
+
+Messaging and Event Streaming
+
+- Managed cloud messaging and event streaming services like Amazon SQS, Amazon SNS, Amazon Kinesis, Azure Service Bus, Azure Event Hubs, or Google Cloud Pub/Sub enable asynchronous communication between microservices
+
+Object Storage
+
+- Managed object storage services: Amazon S3, Azure Blob Storage, or Google Cloud Storage provide highly scalable, durable, and cost-effective storage options for storing and retrieving unstructured data like images, videos
+
+Districtured Caches
+
+- Store frequently accessed data to improve microservice performance and reduce resource-intensive operations like database queries. Redis and Memcached are popular caching systems
+- Managed caching services like Amazon ElastiCache, Azure Cache for Redis, or Google Cloud Memorystore provide in-memory data storage for faster data access and reduced latency, improving the performance of microservices
+
+Authentication and Authorization Services
+
+- User authentication and access control management for microservices. Examples include OAuth 2.0, OpenID Connect, and LDAP
+
+Security and Identity Management
+
+- Managed Identity and Access Management (IAM) services provided by the cloud providers help control access to your microservices, secure communication, and manage authentication and authorization
+
+API Gateways
+
+● Load balancing, authentication, rate limiting, and request routing. Examples include Kong, Ambassador, and Amazon API Gateway
+● Managed API Gateway services like Amazon API Gateway, Azure API Management, or Google Cloud API Gateway provide request routing, authentication, caching, throttling, and monitoring for your microservices apis
+
+Service Meshes
+● Infrastructure layer for managing and controlling communication between microservices, handling tasks like load balancing, service discovery, and observability. Examples of service meshes include Istio, Linkerd, and Kuma
+
+Logging, Monitoring, and Tracing
+
+● Collect, store, and analyze logs and metrics for microservices, helping developers and operators gain insights into performance and troubleshoot issues. Examples Elasticsearch, Logstash, Kibana (ELK stack), Prometheus, and Grafana
+● Managed services like Amazon CloudWatch, Azure Monitor, or Google Cloud
+
+Search and Analytics
+
+● Process, analyze, and search large datasets. Elasticsearch is a popular choice for this purpose
+● Managed search services like Amazon Elasticsearch, Azure Cognitive Search, or Google Cloud Search provide indexing and searching capabilities for microservices
+
+#### Databases
+
+How to Choose a Database for Microservices?
+
+- Data Consistency Level: Do we need Strict-Strong consistency or Eventual consistency?
+- Do we need ACID compliance? Should follow Eventual consistency in microservices to gain high scalability and availability.
+- Fixed or Flexible Schema Choise, Predictable or Dynamic Data: Are we work with fixed or flexible schema that need to change frequently, dynamically changed data?
+- Are we have Predictable Data or Dynamic Data?
+- High or Low Data Volume, Predictable or Un-predictable Data: Are we work with High Volume Data or Low Volume Data?
+- Can we have predictable data that we store our microservices database?
+- NoSQL Databases prioritize partition tolerance that handling large amount of data or data coming in high velocity
+- Read Requirements, Relational or non-Relational Data, Complex Join Queries: Our data is highly structured and requires referential integrity or not required for relationships that is dynamic and frequently changes?
+- Should it work with complex queries, table joins and run SQL queries on normalized data models or Retrieve data operations are simple and performs without table joins?
+- Deployments, Centralized or De-centralized Structure: Do we deployed to large and one or few locations with centralized structure? or Do we need to deploy and replicate data across different geographical zones?
+- High Performance Requirements: Do we need to achieve fast read-write performance?
+- High Scalability Requirements: Do we need High Scalability Requirements both vertical and horizontally scaling?
+- To accomodate millions of request should sacrifice strong consistency
+- High Availability and Low Latency Requirements: Do we need High Availability and Low Latency Requirements that need to separate data across different geographical zones?
+- Can we provide ALL OF THESE FEATURES at the same time? Is it possible to provide High Scalability, High Availability and Low Latency with High Performance and able to run Complex Join Queries providing with ACID principles strong data consistency? New SQL Databases offer these features
+
+#### NewSQL Databases: Compare to SQL and NoSQL
+
+| Distinguishing Feature | SQL                 | NoSQL     | NewSQL          |
+|------------------------|---------------------|-----------|-----------------|
+| Relational             | Yes                 | No        | Yes             |
+| ACID                   | Yes                 | No        | Yes             |
+| SQL                    | Yes                 | No        | Yes             |
+| OLTP                   | Not fully Supported | Supported | Fully Supported |
+| Horizontal Scaling     | No                  | Yes       | Yes             |
+| Query Complexity       | Low                 | High      | Very High       |
+| Distributed            | No                  | Yes       | Yes             |
+
+### Examples of Databases used in Ecommerce Microservice Application
+
+![Sql NoSql databases / Ecommerce Microservice Application](./resources/458-sql-nosql-databases-ecommerce-microservice-application.png)
+
+![NewSql databases / Ecommerce Microservice Application](/resources/459-newsql-databases-ecommerce-microservice-application.png)
+
+![Cloud Serverless databases / Ecommerce Microservice Application](/resources/461-cloud-serverless-databases-ecommerce-microservice-application.png)
