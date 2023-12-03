@@ -689,3 +689,10 @@ How to Choose a Database for Microservices?
 | Query Complexity       | Low                 | High      | Very High       |
 | Distributed            | No                  | Yes       | Yes             |
 
+#### Examples of Databases used in Ecommerce Microservice Application
+
+![Sql NoSql databases / Ecommerce Microservice Application](./resources/458-sql-nosql-databases-ecommerce-microservice-application.png)
+
+![NewSql databases / Ecommerce Microservice Application](/resources/459-newsql-databases-ecommerce-microservice-application.png)
+
+![Cloud Serverless databases / Ecommerce Microservice Application](/resources/461-cloud-serverless-databases-ecommerce-microservice-application.png)
