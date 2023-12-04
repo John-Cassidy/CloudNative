@@ -1317,3 +1317,22 @@ goto bash script
 for i in $(seq 1 100); do curl -s -o /dev/null "http://http://127.0.0.1/productpage"; done
 
 ## Pillar 5: Backing Services - Data Management, Caching, Message Brokers
+
+### Hands-on: Deploy Cloud-Native CockroachDB Database on a Kubernetes Cluster with Minikube
+
+#### Deploy CockroachDB in a Single Kubernetes Cluster with Kubernetes Operator and minikube
+
+[Github - CockroachDB Kubernetes Operator](https://github.com/cockroachdb/cockroach-operator)
+
+Install the Operator
+Apply the custom resource definition (CRD) for the Operator:
+
+Run Command:
+kubectl apply -f https://raw.githubusercontent.com/cockroachdb/cockroach-operator/v2.10.0/install/crds.yaml
+
+Step 1 Deploy CockroachDB in a Single Kubernetes Cluster with Kubernetes Operator and minikube
+Step 2 Start CockroachDB - Initialize the cluster - Apply the custom resource of CockroachDB
+Step 3. Use the built-in SQL client
+Step 4. Access the DB Console
+Step 5. Simulate node failure and node scales
+Step 6. Stop the cluster
