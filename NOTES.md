@@ -1336,3 +1336,14 @@ Step 3. Use the built-in SQL client
 Step 4. Access the DB Console
 Step 5. Simulate node failure and node scales
 Step 6. Stop the cluster
+
+### Hands-on: Building RESTful Microservices with AWS Lambda, API Gateway and DynamoDB
+
+- Create a Serverless API that creates, reads, updates, and deletes items from a DynamoDB table.
+- Create a DynamoDB table using the DynamoDB console.
+- create a Lambda function using the AWS Lambda console.
+- Create an REST API using the API Gateway console. Lastly, we test your API.
+- Clients send request our microservices by making HTTP API calls.
+- Amazon API Gateway hosts RESTful HTTP requests and responses to customers.
+- AWS Lambda contains the business logic to process incoming API calls and leverage DynamoDB as a persistent storage.
+- Amazon DynamoDB persistently stores microservices data and scales based on demand.
