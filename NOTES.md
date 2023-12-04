@@ -1347,3 +1347,15 @@ Step 6. Stop the cluster
 - Amazon API Gateway hosts RESTful HTTP requests and responses to customers.
 - AWS Lambda contains the business logic to process incoming API calls and leverage DynamoDB as a persistent storage.
 - Amazon DynamoDB persistently stores microservices data and scales based on demand.
+
+### Hands-on: Deploy Redis Cache on a Kubernetes Cluster
+
+▪ Step 1. Start Kubernetes - minikube start
+▪ Step 2. Start Redis - Deploy with Bitnami Helm Charts
+▪ Step 3. Use the built-in Redis client
+▪ Step 4. Simulate node failure and node scales
+▪ Step 5. Stop the cluster
+
+![Deploy Redis in a Single Kubernetes Cluster](./resources/512-deploy-redis-cache-to-kubernetes-cluster.png)
+
+

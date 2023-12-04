@@ -696,3 +696,101 @@ How to Choose a Database for Microservices?
 ![NewSql databases / Ecommerce Microservice Application](/resources/459-newsql-databases-ecommerce-microservice-application.png)
 
 ![Cloud Serverless databases / Ecommerce Microservice Application](/resources/461-cloud-serverless-databases-ecommerce-microservice-application.png)
+
+### Caching (K8s and Serverless Caching)
+
+What are Cloud-Native Backing Services for Caching?
+How microservices use Caching in Cloud-Native environments?
+How to Choose a Caching for Microservices?
+Which Caching should select for Backing Services for Cloud-Native Microservices?
+What are patterns & best practices of using Cache in Cloud-native environments?
+
+#### Types of Caching
+
+In-memory cache
+
+- Stores data in the main memory of a computer. In-memory caches are typically the fastest type of cache, but the data is lost when the cache is restarted or the machine is shut down.
+
+Disk cache
+
+- Stores data on a hard drive or solid-state drive. Disk caches are slower than in-memory caches, but they can persist data.
+
+Distributed cache
+
+- Cache is distributed across multiple machines and is typically used in distributed systems, such as microservices architectures.
+- Distributed caches can improve the performance and scalability of a system by allowing data to be stored and accessed from multiple locations.
+
+#### Cache Hit and Cache Miss
+
+- Cache hit occurs when the requested data can be found in the cache.
+- Cache miss occurs when the requested data is not in the cache and must be retrieved from a slower storage db.
+- Cache hits are desirable because they can improve the performance of a system by reducing the number of requests.
+- Cache misses can have a negative impact on performance, because they require additional time and resources to retrieve the requested data.
+- The cache hit rate is a measure of how often a cache is able to fulfill requests from its own store.
+- High cache hit rate indicates that the cache is effective at storing frequently accessed data.
+- Low cache hit rate may indicate that the cache is not large enough.
+
+#### Caching Strategies in Distributed Caching
+
+There are several caching strategies that can be used in distributed microservices:
+
+- Cache Aside Strategy: 
+Client checking the cache for data before making a request to the backend service. When microservices needs to read data from the database, it checks the cache first to determine whether the data is available.
+If the data is available (a cache hit), the cached data is returned. If the data isn’t available (a cache miss), the database is queried for the data.
+The client will retrieve the data from the backend service and store it in the cache for future requests.
+Data is lazy loaded into cache by client application.
+
+- Read-Through Strategy: 
+When there is a cache miss, it loads missing data from the database, populates the cache and returns it to the application.
+When a client requests data that is not found in the cache, the cache will automatically retrieve the data from the underlying database and store it in the cache for future requests.
+Cache-aside strategy, when a client requests data that is not found in the cache, the client is responsible for retrieving the data from the database.
+Read-through cache strategy, when a client requests data that is not found in the cache, the cache will automatically retrieve the data from the database.
+Cache always stays consistent with the database.
+
+- Write-Through Strategy: 
+Update the cache whenever data is written to the backend service. Cache always has the most up-to-date data, but it can also result in a higher number of write operations.
+Instead of lazy-loading the data in the cache after a cache miss, the cache is proactively updated immediately following the primary database update.
+Data is first written to the cache and then to the database.
+
+- Write-Back or Write-Behind Strategy: 
+Delays updating the cache until a later time. This reduce the number of write operations, but the cache may not have the most up-to-date data.
+In Write-Through, the data written to the cache is synchronously updated in the main database.
+In Write-Back or Write-Behind, the data written to the cache is asynchronously updated in the main database.
+
+#### Cache-Aside Pattern for Microservices
+
+- (1) When a client needs to access data, it first checks to see if the data is in the cache.
+- (2) If the data is in the cache, the client retrieves it from the cache and returns it to the caller.
+- (3) If the data is not in the cache, the client retrieves it from the database, stores it in the cache, and then returns it to the caller.
+
+#### Microservices Distributed Caching apply Cache-Aside Pattern on API Gateway
+
+![Microservices Distributed Caching apply Cache-Aside Pattern on API Gateway](./resources/506-distributed-cache.png)
+
+#### Best Practices of using Cache in Cloud-native Apps
+
+Understand Your Data
+Use the right Caching Strategy
+Set appropriate Cache Expiration - Cache Invalidation
+Use Distributed Caching for Scalability and High Availability
+Be careful of Data Consistency
+Monitor and Optimize Cache Performance
+Plan for Cache Failures
+Test your Caching Strategy
+
+#### Cloud-Native Distributed Caches
+
+Distributed Caches
+
+- Redis
+- Memcached
+- Hazelcast
+- TiKV
+- etcd
+
+Cloud Serverless Caching Services
+
+- Amazon ElastiCache
+- Azure Cache for Redis
+- Google Cloud Memorystore
+- Upstash Redis
