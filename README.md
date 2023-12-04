@@ -794,3 +794,11 @@ Cloud Serverless Caching Services
 - Azure Cache for Redis
 - Google Cloud Memorystore
 - Upstash Redis
+
+### Message Brokers (Event-driven communication)
+
+- Event-driven Async Communication for K8s and Serverless Message Brok?
+- What are Cloud-Native Backing Services for Message Brokers?
+- Which Message Brokers should select for Backing Services for Cloud-Native?
+- How microservices use Message Brokers in Cloud-Native environment?
+- What are patterns & best practices of using Message Brokers in Cloud-native?
