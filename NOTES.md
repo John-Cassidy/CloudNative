@@ -1358,4 +1358,16 @@ Step 6. Stop the cluster
 
 ![Deploy Redis in a Single Kubernetes Cluster](./resources/512-deploy-redis-cache-to-kubernetes-cluster.png)
 
+### Hands-on: Deploy Kafka Message Broker on a Kubernetes Cluster
+
+▪ Step 1. Start Kubernetes - minikube start
+▪ Step 2. Start Kafka - Deploy with Bitnami Helm Charts
+▪ Step 3. Use the built-in Kafka client - Publish and Subscribe Topic
+▪ Step 4. Simulate node failure and node scales
+▪ Step 5. Stop the cluster
+
+[Kafka Artifact Hub](https://artifacthub.io/packages/helm/bitnami/kafka)
+
+![Deploy Kafka in a Single Kubernetes Cluster](./resources/575-deploy-kafka-cluster.png)
+
 
