@@ -922,4 +922,14 @@ Messaging Patterns: There are several patterns that can be used for messaging, i
 - Message brokers such as RabbitMQ, Apache Kafka, AWS SQS/SNS, and Google Pub/Sub, provide robust messaging capabilities.
 - Use cases such as event notification, workflow processing, and decoupling services in a microservices architecture.
 
+#### Design Checkout Shopping Cart Use Case with Message Broker using Kafka
+
+1. A customer adds products to their shopping cart using the Cart-Service.
+2. The Cart-Service publishes a CheckoutEvent to a Kafka topic. Event includes: customer ID, shopping cart ID, and the list of products in the cart.
+3. The Order-Service is subscribed to this Kafka topic and consumes the CheckoutEvent. It creates a new order and reserves the products included in the shopping cart.
+4. If successful, it publishes an OrderCreatedEvent to another Kafka topic and starts to Order fullfilment process.
+5. In Order fullfilment process, Invetory, Shipment and Payment services consume this event and perform fullfilment actions.
+
+![Design Checkout Shopping Cart Use Case with Kafka](./resources/564-kafka-checkout-shopping-cart-use-case.png)
+
 ## Pillar 6 
