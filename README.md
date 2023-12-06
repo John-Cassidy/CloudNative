@@ -689,7 +689,7 @@ How to Choose a Database for Microservices?
 | Query Complexity       | Low                 | High      | Very High       |
 | Distributed            | No                  | Yes       | Yes             |
 
-### Examples of Databases used in Ecommerce Microservice Application
+### Databases used in Ecommerce Microservice Application
 
 ![Sql NoSql databases / Ecommerce Microservice Application](./resources/458-sql-nosql-databases-ecommerce-microservice-application.png)
 
@@ -797,8 +797,129 @@ Cloud Serverless Caching Services
 
 ### Message Brokers (Event-driven communication)
 
-- Event-driven Async Communication for K8s and Serverless Message Brok?
-- What are Cloud-Native Backing Services for Message Brokers?
-- Which Message Brokers should select for Backing Services for Cloud-Native?
-- How microservices use Message Brokers in Cloud-Native environment?
-- What are patterns & best practices of using Message Brokers in Cloud-native?
+What are Message Brokers in Event-driven communication?
+
+Message brokers in event-driven communication are intermediary software that translate messages between different applications. They allow systems to communicate and share data without needing to know details about each other's design.
+
+In an event-driven architecture, these brokers handle the distribution of messages (events) from event producers to event consumers. They can also provide additional features like message persistence, message routing, and load balancing.
+
+Here's a simple pseudocode of how a message broker might work in an event-driven system:
+
+An event producer sends a message to the broker.
+The broker receives the message and stores it temporarily.
+The broker determines which consumers are interested in this type of message.
+The broker sends the message to all interested consumers.
+In actual code, the implementation would depend on the specific message broker software being used, such as RabbitMQ, Apache Kafka, or AWS SQS.
+
+#### What are some popular open-source message brokers for event-driven communication?
+
+There are several popular open-source message brokers that are commonly used for event-driven communication. Here are a few:
+
+RabbitMQ: This is a widely used open-source message broker that supports multiple messaging protocols.
+
+Apache Kafka: Kafka is a distributed event streaming platform that is used for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications.
+
+ActiveMQ: This is a message broker written in Java together with a full Java Message Service (JMS) client.
+
+NATS: A high performance, open-source messaging system. It is lightweight and easy to deploy.
+
+Redis Pub/Sub: While not a full-fledged message broker, Redis has publish/subscribe capabilities that can be used for event-driven architectures.
+
+Mosquitto: An open-source message broker that implements the MQTT protocol, a lightweight method of carrying out messaging using a publish/subscribe model.
+
+EMQ X: An open-source MQTT message broker for IoT (Internet of Things) and Edge computing.
+
+#### What are Cloud-Native Backing Services for Message Brokers?
+
+Cloud-native backing services for message brokers are services that provide messaging capabilities and are designed to take full advantage of cloud computing frameworks. These services are scalable, resilient, and managed, meaning you don't have to worry about the underlying infrastructure.
+
+Examples of such services include:
+
+Amazon SQS (Simple Queue Service): A fully managed message queuing service that enables you to decouple and scale microservices, distributed systems, and serverless applications.
+
+Google Cloud Pub/Sub: A global, real-time messaging service that allows you to send and receive messages between independent applications.
+
+Azure Service Bus: A fully managed enterprise integration message broker. Service Bus can decouple applications and services.
+
+RabbitMQ on CloudAMQP: CloudAMQP automates every part of setup, running, and scaling of RabbitMQ clusters.
+
+Confluent Cloud (Apache Kafka as a Service): A fully managed, cloud-native Kafka service.
+
+These services provide the benefits of message brokers without the need to manage the underlying infrastructure, making them a good fit for cloud-native applications.
+
+#### What are some key considerations when choosing a message broker for event-driven communication in a cloud-native application?
+
+When choosing a message broker for event-driven communication in a cloud-native application, consider the following key factors:
+
+Scalability: The message broker should be able to handle the load as your application scales. It should be able to distribute messages efficiently even as the number of producers and consumers increases.
+
+Durability: If your application requires that no messages are lost, you need a message broker that supports message persistence.
+
+Delivery Guarantees: Depending on your use case, you might need at-least-once, at-most-once, or exactly-once delivery semantics.
+
+Latency: If your application requires real-time communication, you need a message broker with low latency.
+
+Throughput: The message broker should be able to handle the volume of messages your application will produce.
+
+Integration: The message broker should integrate well with your existing systems and technology stack.
+
+Support and Community: Consider the level of support available, either from a vendor or an open-source community.
+
+Cost: Consider both the direct costs (licensing or usage fees) and indirect costs (development, operations, support).
+
+Operational Complexity: Some message brokers might require significant effort to operate and maintain.
+
+Security: The message broker should support the necessary security features like encryption and access control.
+
+#### What are some popular cloud-native messaging patterns used in event-driven architectures?
+
+There are several popular cloud-native messaging patterns used in event-driven architectures:
+
+Publish/Subscribe (Pub/Sub): In this pattern, messages are sent to all subscribers, or to those that have subscribed to specific topics. This is useful for broadcasting information to multiple services.
+
+Event Sourcing: This pattern involves storing all changes to application state as a sequence of events. These events can then be replayed to recreate the application state.
+
+Command Query Responsibility Segregation (CQRS): This pattern separates read and update operations for a data store, which can be beneficial in complex business systems.
+
+Message Queue: In this pattern, messages are stored on the queue until they are processed and deleted by a receiver. This is useful for handling asynchronous tasks.
+
+Event-Driven Data Management: This pattern involves updating a database in response to events in the system. This can be used to keep multiple databases in sync.
+
+Saga: This pattern is a sequence of local transactions where each transaction updates data within a single service. The Saga pattern coordinates and sequences these local transactions, and handles failure in any of them.
+
+#### Streaming
+
+Streaming is a pattern in message broker systems that is particularly useful when dealing with large volumes of data or real-time data processing. It fits into the broader category of publish/subscribe patterns, but with a focus on continuous data flow.
+
+In a streaming pattern, producers continuously generate data and send it to the message broker. Consumers then process the data in real-time or near real-time. This is different from traditional message broker patterns where messages are discrete and often processed individually.
+
+Apache Kafka is a popular message broker that supports the streaming pattern. It allows for real-time processing of data streams and can handle very high volumes of data. This makes it suitable for use cases like real-time analytics, log aggregation, and event sourcing.
+
+- Data streaming, where a continuous flow of data is processed and often analyzed in real time.
+- Use cases like real-time analytics, anomaly detection, and live leaderboards, among others.
+- Apache Kafka, Amazon Kinesis, or Google Pub/Sub to manage these streams of data.
+- Handle vast amounts of data in near-real time, necessary for microservices-based apps that require high-throughput and low-latency processing.
+
+#### Messaging
+
+Messaging is a fundamental part of message broker patterns. It's the method by which data is transferred between services in a distributed system. Here's how it fits into the overall pattern:
+
+Producers: Services that generate messages are known as producers. A message could represent a variety of things, such as a new piece of data, an update to existing data, or a command that a service should perform an operation.
+
+Message Broker: The message broker receives messages from producers and routes them to the appropriate consumers. The broker can also provide additional features like message persistence, message ordering, and backpressure management.
+
+Consumers: Services that receive messages from the broker are known as consumers. They process the messages and perform any necessary actions.
+
+Messaging Patterns: There are several patterns that can be used for messaging, including request/reply, publish/subscribe, and streaming. The best choice depends on the specific use case.
+
+- Asynchronous communication between services.
+- Decoupling between microservices, allowing them to interact without being directly connected or aware of each other.
+- Messaging systems are often categorized into two types: message queues and publish/subscribe (pub/sub) systems.
+- Message queues: messages are stored on the queue until they are processed and deleted by a receiver.
+- Pub/sub systems: messages are sent to all subscribers, or to those that have subscribed to specific topics.
+- Publish messages that are then consumed by other services, without the services needing to be aware of each other's existence.
+- Greatly decouples services and allows them to evolve independently.
+- Message brokers such as RabbitMQ, Apache Kafka, AWS SQS/SNS, and Google Pub/Sub, provide robust messaging capabilities.
+- Use cases such as event notification, workflow processing, and decoupling services in a microservices architecture.
+
+## Pillar 6 
