@@ -1526,3 +1526,13 @@ minikube stop
 
 This hands-on lab has shown you how to use Kubernetes Event-Driven Autoscaling (KEDA) to scale pods in a Kubernetes cluster using Minikube.
 We used KEDA to autoscale pods based on the number of messages in a Kafka topic in a Minikube Kubernetes cluster.
+
+### Hands-on: Deploying Microservices on Amazon EKS Fargate
+
+- Step 1. Installing or updating eksctl to interact Kubernetes Cluster on EKS
+- Step 2. Create an EKS Cluster with Fargate using eksctl
+- Step 3. Deploy Nginx microservices on EKS Cluster w/Fargate using eksctl
+- Step 4. Create an ECR repository and Push Docker Image to Container Registry
+- Step 5. Deploy Product microservices on EKS Cluster w/Fargate using eksctl
+- Step 6. AWS Fargate Auto-scale Deploy Product microservices on EKS
+- Clear Resources - IMPORTANT
