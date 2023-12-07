@@ -932,4 +932,55 @@ Messaging Patterns: There are several patterns that can be used for messaging, i
 
 ![Design Checkout Shopping Cart Use Case with Kafka](./resources/564-kafka-checkout-shopping-cart-use-case.png)
 
-## Pillar 6 
+## Pillar6: Scalability: Kubernetes Horizontal Pod Autoscaler(HPA) and KEDA
+
+- What are Scalability ? Why need to Scale?
+- Vertical-Horizontal Scaling, VPA, HPA, Cluster Autoscaler
+- Best Practices of Scaling Cloud-native Applications in Kubernetes
+- KEDA Event-driven Autoscaling Cloud-native Applications in Kubernetes
+- Cloud Serverless Scalability: AWS Fargate, Azure Container Apps, Google CloudRun, Knative, Openshift Serverless
+- Hands-on: Cloud-Native Scalability(Vertical-Horizontal Scaling, VPA, HPA, Cluster Autoscaler, KEDA) on a Kubernetes Cluster
+
+### Scaling Cloud-native Applications in Kubernetes
+
+Vertical Scaling, Horizontal Scaling, Vertical Pod Autoscaler (VPA), Horizontal Pod Autoscaler (HPA), Cluster Autoscaler, Kubernetes Event-Driven Autoscaling (KEDA)
+
+Vertical Scaling
+
+- Increase the resources (CPU and memory) allocated to your app. This can be done by updating the resources field in your container specifications in your deployment configuration.
+
+Horizontal Scaling
+
+- Increase the number of instances (pods) of your app to handle more load. To manually scale the number of replicas, you can use the kubectl scale command or update the replicas field in your deployment configuration.
+
+Vertical Pod Autoscaler (VPA)
+
+- VPA adjusts the resources (CPU and memory) allocated to a pod based on its usage. Improve resource utilization and prevent overprovisioning or underprovisioning of resources.
+
+Horizontal Pod Autoscaler (HPA)
+
+- HPA automatically scales the number of pod replicas based on predefined resource utilization (CPU, memory) or custom metrics. To use HPA, create a HorizontalPodAutoscaler resource that targets your deployment and specifies the desired CPU utilization or custom metric thresholds.
+
+#### Scaling Cloud-native Applications in Kubernetes - KEDA
+
+- Cluster Autoscaler: Adjusts the size of the Kubernetes cluster based on the current resource utilization, adding or removing nodes as needed. It ensures that there are enough resources for your app to scale out while minimizing the number of underutilized nodes.
+- Kubernetes Event-Driven Autoscaling (KEDA): KEDA is an extension to Kubernetes that provides event-driven autoscaling for applications. It can scale applications based on external events like the length of a message queue or the number of incoming HTTP requests.
+- KEDA acts as an extension to the Kubernetes Horizontal Pod Autoscaler (HPA), which usually scales based on CPU and memory utilization metrics.
+- KEDA is an open-source project that enables event-driven autoscaling for Kubernetes workloads.
+- It allows you to scale your applications based on various event sources and custom metrics, such as message queue length or HTTP requests per second. It enables the deployment of serverless containers that can automatically scale based on events and external metrics.
+
+![Kubernetes Event-Driven Autoscaling (KEDA) Scaling in Kubernetes](./resources/601-keda.png)
+
+##### KEDA Architecture Components
+
+- KEDA provides 2 main components: KEDA Operator and Metrics Server
+- KEDA Operator: KEDA operator allows end-users to scale workloads in/out from 0 to N instances with support for Kubernetes Deployments, obs, StatefulSets or any custom resource that defines /scale subresource.
+- Metrics Server: Metrics server exposes external metrics to Horizontal Pod Autoscaler (HPA) in Kubernetes for autoscaling purposes such as messages in a Kafka topic, or number of events in an Azure event hub.
+- KEDA must be the only installed metric adapter.
+- KEDA provides wide range of rich catalog of 50+ KEDA scalers.
+- Goto Official Website - Kubernetes Event-driven Autoscaling: [https://keda.sh](https://keda.sh)
+
+![Shopping Cart – Kafka – Ordering – KEDA Workflow](./resources/617-design-shopping-cart-use-case-scailing-of-order-microservice.png)
+
+![Shopping Cart – Kafka – Ordering – Fargate Workflow](./resources/620-design-shopping-cart-use-case-scailing-of-order-microservice.png)
+
