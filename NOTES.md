@@ -1370,4 +1370,5 @@ Step 6. Stop the cluster
 
 ![Deploy Kafka in a Single Kubernetes Cluster](./resources/575-deploy-kafka-cluster.png)
 
+## Pillar6: Scalability: Kubernetes Horizontal Pod Autoscaler(HPA) and KEDA
 
