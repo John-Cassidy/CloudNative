@@ -1536,3 +1536,68 @@ We used KEDA to autoscale pods based on the number of messages in a Kafka topic 
 - Step 5. Deploy Product microservices on EKS Cluster w/Fargate using eksctl
 - Step 6. AWS Fargate Auto-scale Deploy Product microservices on EKS
 - Clear Resources - IMPORTANT
+
+## Pillar7: Devops, CI/CD, IaC and GitOps
+
+### Deploy Microservices to AKS with GitHub Actions
+
+- Create a Workflow File: Create a .github/workflows directory in your repository. This file will define the GitHub Actions workflow.
+- Define Workflow Steps: Inside the workflow file, define the steps GitHub Actions should take. i.e. Checkout code, build container image, push registry..
+  - Check Out Code: Use the actions/checkout action
+  - Set Up Environment: Docker to build container images.
+  - Build Container Image: Build the Docker image for your microservice
+  - Push Image to Container Registry: push it to a container registry like Docker Hub
+  - Configure Kubernetes CLI: Set up kubectl in the runner environment.
+  - Deploy to Kubernetes: Apply your Kubernetes manifests to your cluster.
+- Commit and Push: Commit the workflow file to your GitHub repository. That trigger the workflow.
+- Monitor the Workflow: Watch the progress and view the logs in the “Actions” tab of your GitHub repository
+
+Example of Github workflow:
+
+```yaml
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: your-dockerhub-username/your-repo:latest
+    
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'latest'
+    
+    - name: Deploy to Kubernetes
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+        export KUBECONFIG=kubeconfig.yaml
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+```
+
+![Deploy Microservices to AKS with Github Actions](./resources/677-github-action.png)
+

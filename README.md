@@ -934,7 +934,7 @@ Messaging Patterns: There are several patterns that can be used for messaging, i
 
 ## Pillar6: Scalability: Kubernetes Horizontal Pod Autoscaler(HPA) and KEDA
 
-- What are Scalability ? Why need to Scale?
+- What are Scalability? Why need to Scale?
 - Vertical-Horizontal Scaling, VPA, HPA, Cluster Autoscaler
 - Best Practices of Scaling Cloud-native Applications in Kubernetes
 - KEDA Event-driven Autoscaling Cloud-native Applications in Kubernetes
@@ -984,3 +984,52 @@ Horizontal Pod Autoscaler (HPA)
 
 ![Shopping Cart – Kafka – Ordering – Fargate Workflow](./resources/620-design-shopping-cart-use-case-scailing-of-order-microservice.png)
 
+## Pillar7: Devops, CI/CD, IaC and GitOps
+
+▪ What are Devops CI/CD?
+▪ How Devops and CI/CD applied in Cloud-Native microservices?
+▪ What are patterns & best practices of Devops and CI/CD in Cloud-Native microservices?
+▪ What is Infrastructure as Code (IaC)?
+▪ How IaC uses to create Kubernetes clusters?
+▪ What is GitOps?
+▪ How GitOps uses in Cloud-Native Microservices deployments?
+▪ Explore Devops CI/CD tools
+▪ Implement Hands-on labs for Devops and CI/CD in Cloud-Native Kubernetes cluster
+
+### Terraform
+
+What is Terraform
+
+- Terraform is an open-source Infrastructure as Code (IaC) tool developed by HashiCorp.
+- Define and provision data center infrastructure using a declarative configuration language known as HashiCorp Configuration Language (HCL), or optionally JSON. 
+- Terraform can manage infrastructure across various cloud providers, as well as on-premises resources.
+- Terraform enables you to safely and predictably provision and manage infrastructure in any cloud.
+- Terraform is used primarily by DevOps teams to automate various infrastructure tasks like provisioning of cloud resources.
+
+How Terraform uses in Cloud-native
+
+- Provisioning Kubernetes Clusters: Write scripts to automate the creation of Kubernetes clusters across various cloud providers such as AWS (EKS), Azure (AKS), Google Cloud (GKE), or even on-premises.
+- Managing Kubernetes Resources: Terraform has a Kubernetes provider which allows you to manage Kubernetes resources such as namespaces, deployments, and services.
+- Microservices Deployment: Defining Kubernetes deployments and services in Terraform scripts, ensure microservices have the necessary configurations, scaling policies, and networking.
+- Scaling and Auto-scaling: Define auto-scaling policies for your microservices.
+- Integration with Continuous Delivery Pipelines: Terraform scripts can be integrated into CI/CD pipelines, allows for automated deployment and management of infrastructure and applications.
+- State Management: Terraform maintains a state file which tracks the current state of the infrastructure. Crucial for managing configurations over time and is beneficial in a microservices env.
+
+#### Terraform IaC Steps - How Terraform Works?
+
+![Terraform IaC Steps - How Terraform Works](./resources/688-terraform.png)
+
+
+### Design Microservices with DevOps,CI/CD, IaC and GitOps
+
+#### Steps of DevOps,CI/CD, IaC and GitOps Architecture
+
+1. Infrastructure Provisioning: Terraform configuration files to describe your AWS infrastructure including the EKS cluster, ECR repositories.
+2. Set Up ArgoCD: Deploy ArgoCD in your EKS cluster. Configure ArgoCD to monitor your GitHub repositories for changes in Kubernetes manifests.
+3. Develop Microservices: Writes code for the microservices and pushes to GitHub.
+4. GitHub Actions Trigger: It builds a Docker image of the microservice.
+Pushes the Docker image to ECR. Updates the Kubernetes manifest files with the new image tag.
+5. ArgoCD Observes and Deploys: ArgoCD notices the changes in Kubernetes manifests. It pulls these manifest files. Deploys the updated microservice to the EKS cluster by applying the manifests.
+6. Monitor and Observe: Set up monitoring and logging solutions like Prometheus and Grafana, AWS CloudWatch for observing the performance and health of your microservices
+
+![Design Microservices with DevOps,CI/CD, IaC and GitOps](./resources/703-Github-Workflow-to-AWS-EKS-deployment.png)
