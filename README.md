@@ -1019,7 +1019,6 @@ How Terraform uses in Cloud-native
 
 ![Terraform IaC Steps - How Terraform Works](./resources/688-terraform.png)
 
-
 ### Design Microservices with DevOps,CI/CD, IaC and GitOps
 
 #### Steps of DevOps,CI/CD, IaC and GitOps Architecture

@@ -1601,3 +1601,260 @@ jobs:
 
 ![Deploy Microservices to AKS with Github Actions](./resources/677-github-action.png)
 
+### Hands-on: Terraform IaC provision AWS EC2 instance
+
+- Terraform Workflow and Development Loop, Terraform Providers
+- Install and Setup Terraform
+- Build, Change and Destroy Infrastructure
+- Parameterizing the Configuration with Input Variables
+
+Deploying Microservices on Amazon EKS Fargate– Task List
+
+- Step 1. Install and Setup Terraform
+  - Configure AWS CLI
+  - [Install Terraform on local machine](https://developer.hashicorp.com/terraform/install)
+    - copy binary into c:\tools folder and add to PATH environment variable
+  - Choose which Terraform Feature Provider and Models to use: [https://registry.terraform.io](https://registry.terraform.io)
+- Step 2. Terraform Develop IaC: Write configuration the Desired State
+- Step 3. Terraform Init: Initializing the Working Directory
+- Step 4. Terraform Plan: Validate and format the configuration
+- Step 5. Terraform Apply: Create infrastructure w/ Applying the Plan
+- Step 6. Change Infrastructure w/ Config Changes and Apply Changes
+- Step 7. Terraform Variables: Parameterizing the Configuration with Input Variables
+- Step 8. Terraform Destroy: Destroy Infrastructure
+
+![Terraform IaC provision AWS EC2 instance](./resources/708-Terraform.png)
+
+![Terraform IaC Steps - How Terraform Works?](./resources/719-Terraform.png)
+
+#### Terraform Providers
+
+- Terraform implements a modular approach in its application architecture.
+- The Terraform binary we downloaded is the core module required to perform core Terraform functions.
+- Terraform Providers are responsible for understanding API interactions and exposing resources to Terraform.
+- They essentially act as a bridge between the Terraform configuration files and the target platform's API.
+- Terraform Providers from Registry[https://registry.terraform.io/](https://registry.terraform.io/)
+
+#### How Terraform, providers and modules work
+
+Terraform provisions, updates, and destroys infrastructure resources such as physical machines, VMs, network switches, containers, and more.
+
+Configurations are code written for Terraform, using the human-readable HashiCorp Configuration Language (HCL) to describe the desired state of infrastructure resources.
+
+Providers are the plugins that Terraform uses to manage those resources. Every supported service or infrastructure platform has a provider that defines which resources are available and performs API calls to manage those resources.
+
+Modules are reusable Terraform configurations that can be called and configured by other configurations. Most modules manage a few closely related resources from a single provider.
+
+The Terraform Registry makes it easy to use any provider or module. To use a provider or module from this registry, just add it to your configuration; when you run `terraform init`, Terraform will automatically download everything it needs.
+
+#### Step 2. Terraform Develop IaC: Write configuration the Desired State
+
+- goto vs code
+  - create section devops_cicd
+  - create lecture 375,376
+
+Each Terraform configuration must be in its own working directory. Create a directory for your configuration.
+
+mkdir terraform-ec2
+
+Change into the directory.
+cd terraform-ec2
+
+Create main.tf file to define your infrastructure.
+touch main.tf
+
+Open main.tf in your text editor, paste in the configuration below, and save the file.
+
+```tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.16"
+    }
+  }
+
+  required_version = ">= 1.2.0"
+}
+
+provider "aws" {
+  region  = "us-west-2"
+}
+
+resource "aws_instance" "app_server" {
+  ami           = "ami-830c94e3"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "terraform-example"
+  }
+}
+```
+
+This configuration tells Terraform to create an EC2 instance in the AWS region us-west-2 using the Amazon Linux 2 AMI.
+
+#### Step 3. Terraform Init: Initializing the Working Directory
+
+- goto vs code
+  - goto section devops_cicd
+  - goto lecture 376 / terraform-ec2
+
+Run terraform init in your configuration directory.
+This will download the necessary provider plugins for Terraform.
+Initialize the directory.
+
+terraform init
+
+Terraform downloads the aws provider and installs it in a hidden subdirectory of your current working directory, named .terraform.
+
+#### Step 4. Terraform Plan: Validate the resource declaration, Format and validate the configuration
+
+- goto vs code
+  - goto section devops_cicd
+  - goto lecture 377 / terraform-ec2
+
+Planning - terraform plan:
+This command allows you to see what Terraform will do before actually making any changes.
+It's a dry run that reveals which actions Terraform will take to achieve the desired state defined in your configuration.
+It can be used to prevent surprises and avoid mistakes.
+
+terraform plan
+
+Since this is the first time we are going to run the code – there are no changes or deletions highlighted.
+
+Also we can format and validate resources before applying:
+
+Format your configuration.
+Terraform will print out the names of the files it modified, if any.
+
+Run Command:
+terraform fmt
+
+Validate your configuration.
+
+Run Command:
+terraform validate
+
+Success! The configuration is valid.
+
+#### Step 5. Terraform Apply: Create infrastructure w/ Applying the Plan
+
+- goto vs code
+  - goto section devops_cicd
+  - goto lecture 378 / terraform-ec2
+
+Applying Changes - terraform apply: Create infrastructure:
+
+Apply the configuration now with the terraform apply command.
+Terraform will print output include information about infra creation.
+
+Run Command:
+terraform apply
+
+Before it applies any changes, Terraform prints out the execution plan which describes the actions Terraform will take in order to change your infrastructure to match the configuration.
+
+The output format is similar to the diff format generated by tools such as Git.
+The output has a + next to aws_instance.app_server, meaning that Terraform will create this resource.
+
+goto AWS Console
+
+EC2
+
+Change region - us-west-2
+
+See EC2 instances
+
+#### Step 6. Change Infrastructure w/ Config Changes and Apply Changes
+
+- goto vs code
+  - goto section devops_cicd
+  - goto lecture 379 / terraform-ec2
+
+Change Infrastructure Code:
+
+Now update the ami of your instance.
+Change the aws_instance.app_server resource under the provider block in main.tf by replacing the current AMI ID with a new one.
+
+- CHANGE AMI
+  - ami-08d70e59c07c61a3a
+
+Apply Changes
+After changing the configuration, run terraform apply again to see how Terraform will apply this change to the existing resources.
+
+Run Command:
+terraform apply
+
+The below snippet is formatted as a diff to give you context about which parts of your configuration you need to change.
+Replace the content displayed in red with the content displayed in green, leaving out the leading + and - signs.
+
+ ```tf
+ resource "aws_instance" "app_server" {
+-  ami           = "ami-830c94e3"
++  ami           = "ami-08d70e59c07c61a3a"
+   instance_type = "t2.micro"
+ }
+ ```
+
+ Enter a value: yes
+
+#### Step 7. Terraform Variables: Parameterizing the Configuration with Input Variables
+
+- goto vs code
+  - goto section devops_cicd
+  - goto lecture 380 / terraform-ec2
+
+Terraform Variables:
+
+Set the instance name with a variable
+The current configuration includes a number of hard-coded values. Terraform variables allow you to write configuration that is flexible and easier to re-use.
+
+Add a variable to define the instance name.
+
+Create a new file called "variables.tf" with a block defining a new instance_name variable.
+
+```tf
+variable "instance_name" {
+  description = "Value of the Name tag for the EC2 instance"
+  type        = string
+  default     = "ExampleAppServerInstance"
+}
+```
+
+In main.tf, update the aws_instance resource block to use the new variable.
+The instance_name variable block will default to its default value ("ExampleAppServerInstance") unless you declare a different value.
+
+```tf
+ resource "aws_instance" "app_server" {
+   ami           = "ami-08d70e59c07c61a3a"
+   instance_type = "t2.micro"
+
+   tags = {
+-    Name = "ExampleAppServerInstance"
++    Name = var.instance_name
+   }
+ }
+```
+
+Apply your configuration
+Apply the configuration. Respond to the confirmation prompt with a yes.
+
+terraform apply
+
+#### Step 8. Terraform Destroy: Destroy Infrastructure
+
+- goto vs code
+  - goto section devops_cicd
+  - goto lecture 381 / terraform-ec2
+
+Terraform Variables:
+
+Destroy
+The terraform destroy command terminates resources managed by your Terraform project.
+To delete the EC2 instance created using apply, run terraform destroy to terminate the same instance as below.
+
+terraform destroy
+
+Here, it again asks for our confirmation with an output
+Enter a value: yes
+
+Check AWS Console
