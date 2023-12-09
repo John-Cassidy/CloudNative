@@ -1858,3 +1858,145 @@ Here, it again asks for our confirmation with an output
 Enter a value: yes
 
 Check AWS Console
+
+### Hands-on: GitHub Actions CI/CD for Build & Push Docker Images to DockerHub
+
+Create Repository on GitHub and push Web API project with Dockerfile
+Create GitHub Actions workflow
+Develop Workflow for Build & Push Docker Images to DockerHub
+
+Task List:
+
+- Step 1. Create Repository on GitHub
+- Step 2. Create Product microservice and Dockerfile
+- Step 3. Create GitHub Secrets for DockerHub Username and Token
+- Step 4. Create and Define a GitHub Actions Workflow File
+- Step 5. Commit Push and Monitor Workflow, check DockerHub
+- Step 6. Change code and commit push to monitor new GitHub Actions workflow
+
+Prerequisites:
+
+- A GitHub account
+- A Docker Hub account
+- A repository on GitHub containing Product Microservices with a Dockerfile
+
+GitHub Repo: [https://github.com/John-Cassidy/ProductService](https://github.com/John-Cassidy/ProductService)
+
+![GitHub Actions CI/CD for Build & Push Docker Images to DockerHub](./resources/725-github-workflow.png)
+
+#### Step 3. Create GitHub Secrets for DockerHub Username and Token
+
+Go to your GitHub repository and navigate to "Settings" > "Secrets".
+
+Create two Repository secrets:
+
+DOCKER_HUB_USERNAME: Your Docker Hub username.
+DOCKER_HUB_TOKEN: Your Docker Hub access token.
+
+DockerHub: [https://hub.docker.com/u/USERNAME](https://hub.docker.com/u/USERNAME)
+
+#### Step 4. Create and Define a GitHub Actions Workflow File
+
+Create a GitHub Actions Workflow File:
+
+- In the workflows directory, create a file named docker-image.yml.
+
+- Define Workflow:
+  - Edit docker-image.yml and define the workflow:
+
+name: Build and Push Docker Image
+
+```yaml
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: username/productservice:latest
+```
+
+This file defines a simple workflow that gets triggered on a push to the main branch. 
+It checks out your code, logs into Docker Hub, builds the Docker image and pushes it to Docker Hub.
+
+That we can check to dockerhub repository in here: [https://hub.docker.com/r/username/productservice](https://hub.docker.com/r/username/productservice)
+
+#### Step 5: Commit Push and Monitor Workflow, check DockerHub
+
+check in code to main branch
+
+#### Step 6. Change code and commit push to monitor new GitHub Actions workflow
+
+change code, check in code to main branch
+
+### Hands-on: Deploy to Kubernetes cluster with GitHub Actions workflow
+
+See - [GitHub Marketplace Actions Deploy to Kubernetes cluster](https://github.com/marketplace/actions/deploy-to-kubernetes-cluster)
+
+![Deploy Microservices to AKS with GitHub Actions - Azure](./resources/726-github-action-deploy-to-AKS.png)
+
+#### Example yaml file for end to end workflows
+
+```yaml
+on: [push]
+
+jobs:
+   build:
+      runs-on: ubuntu-latest
+      steps:
+         - uses: actions/checkout@master
+
+         - uses: Azure/docker-login@v1
+           with:
+              login-server: contoso.azurecr.io
+              username: ${{ secrets.REGISTRY_USERNAME }}
+              password: ${{ secrets.REGISTRY_PASSWORD }}
+
+         - run: |
+              docker build . -t contoso.azurecr.io/k8sdemo:${{ github.sha }}
+              docker push contoso.azurecr.io/k8sdemo:${{ github.sha }}
+
+         - uses: azure/setup-kubectl@v2.0
+
+         # Set the target AKS cluster.
+         - uses: Azure/aks-set-context@v1
+           with:
+              creds: '${{ secrets.AZURE_CREDENTIALS }}'
+              cluster-name: contoso
+              resource-group: contoso-rg
+
+         - uses: Azure/k8s-create-secret@v1.1
+           with:
+              container-registry-url: contoso.azurecr.io
+              container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+              container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+              secret-name: demo-k8s-secret
+
+         - uses: Azure/k8s-deploy@v4
+           with:
+              action: deploy
+              manifests: |
+                 manifests/deployment.yml
+                 manifests/service.yml
+              images: |
+                 demo.azurecr.io/k8sdemo:${{ github.sha }}
+              imagepullsecrets: |
+                 demo-k8s-secret
+```
