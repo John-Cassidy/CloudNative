@@ -2000,3 +2000,6 @@ jobs:
               imagepullsecrets: |
                  demo-k8s-secret
 ```
+
+## Pillar8: Monitoring & Observability with Distributed Logging and Tracing
+
