@@ -641,21 +641,22 @@ Security and Identity Management
 
 API Gateways
 
-● Load balancing, authentication, rate limiting, and request routing. Examples include Kong, Ambassador, and Amazon API Gateway
-● Managed API Gateway services like Amazon API Gateway, Azure API Management, or Google Cloud API Gateway provide request routing, authentication, caching, throttling, and monitoring for your microservices apis
+- Load balancing, authentication, rate limiting, and request routing. Examples include Kong, Ambassador, and Amazon API Gateway
+- Managed API Gateway services like Amazon API Gateway, Azure API Management, or Google Cloud API Gateway provide request routing, authentication, caching, throttling, and monitoring for your microservices apis
 
 Service Meshes
-● Infrastructure layer for managing and controlling communication between microservices, handling tasks like load balancing, service discovery, and observability. Examples of service meshes include Istio, Linkerd, and Kuma
+
+- Infrastructure layer for managing and controlling communication between microservices, handling tasks like load balancing, service discovery, and observability. Examples of service meshes include Istio, Linkerd, and Kuma
 
 Logging, Monitoring, and Tracing
 
-● Collect, store, and analyze logs and metrics for microservices, helping developers and operators gain insights into performance and troubleshoot issues. Examples Elasticsearch, Logstash, Kibana (ELK stack), Prometheus, and Grafana
-● Managed services like Amazon CloudWatch, Azure Monitor, or Google Cloud
+- Collect, store, and analyze logs and metrics for microservices, helping developers and operators gain insights into performance and troubleshoot issues. Examples Elasticsearch, Logstash, Kibana (ELK stack), Prometheus, and Grafana
+- Managed services like Amazon CloudWatch, Azure Monitor, or Google Cloud
 
 Search and Analytics
 
-● Process, analyze, and search large datasets. Elasticsearch is a popular choice for this purpose
-● Managed search services like Amazon Elasticsearch, Azure Cognitive Search, or Google Cloud Search provide indexing and searching capabilities for microservices
+- Process, analyze, and search large datasets. Elasticsearch is a popular choice for this purpose
+- Managed search services like Amazon Elasticsearch, Azure Cognitive Search, or Google Cloud Search provide indexing and searching capabilities for microservices
 
 #### Databases
 
@@ -986,15 +987,15 @@ Horizontal Pod Autoscaler (HPA)
 
 ## Pillar7: Devops, CI/CD, IaC and GitOps
 
-▪ What are Devops CI/CD?
-▪ How Devops and CI/CD applied in Cloud-Native microservices?
-▪ What are patterns & best practices of Devops and CI/CD in Cloud-Native microservices?
-▪ What is Infrastructure as Code (IaC)?
-▪ How IaC uses to create Kubernetes clusters?
-▪ What is GitOps?
-▪ How GitOps uses in Cloud-Native Microservices deployments?
-▪ Explore Devops CI/CD tools
-▪ Implement Hands-on labs for Devops and CI/CD in Cloud-Native Kubernetes cluster
+- What are Devops CI/CD?
+- How Devops and CI/CD applied in Cloud-Native microservices?
+- What are patterns & best practices of Devops and CI/CD in Cloud-Native microservices?
+- What is Infrastructure as Code (IaC)?
+- How IaC uses to create Kubernetes clusters?
+- What is GitOps?
+- How GitOps uses in Cloud-Native Microservices deployments?
+- Explore Devops CI/CD tools
+- Implement Hands-on labs for Devops and CI/CD in Cloud-Native Kubernetes cluster
 
 ### Terraform
 
@@ -1032,3 +1033,216 @@ Pushes the Docker image to ECR. Updates the Kubernetes manifest files with the n
 6. Monitor and Observe: Set up monitoring and logging solutions like Prometheus and Grafana, AWS CloudWatch for observing the performance and health of your microservices
 
 ![Design Microservices with DevOps,CI/CD, IaC and GitOps](./resources/703-Github-Workflow-to-AWS-EKS-deployment.png)
+
+## Pillar8: Monitoring & Observability with Distributed Logging and Tracing
+
+- What are Monitoring Observability?
+- What are best practices of Monitoring and Observability in CN microservices?
+- How Monitoring and Observability applied in Cloud-Native microservices?
+- What are Health Monitoring?
+- How Health Monitoring uses in Kubernetes clusters?
+- What are Distributed Logging-Tracing?
+- How Distributed Logging-Tracing uses in Kubernetes clusters?
+- Explore Tools: Prometheus, Grafana, ELK, Jeager
+- Design our E-Commerce application with Monitoring and Observability
+- Implement Hands-on labs for Monitoring and Observability in CN Kubernetes cluster with Prometheus, Grafana, ELK ...
+
+### Monitoring & Observibility in Cloud-native Applications
+
+Topics divided by 2 main and sub topics:
+
+Monitoring
+
+- System Infrastructure Monitoring: CPU, Memory usage
+- Backing Services Monitoring: Redis, Postgres, RabbitMQ, Kafka…
+- Application Monitoring: Health Checks, Performance and Business Metrics (APM, ABM)
+
+Observability
+
+- Distributed Logging
+- Distributed Tracing
+- Chaos Engineering
+
+#### Why Monitoring Tools?
+
+Complexity of Microservices Architecture
+
+- Organizations increasingly adopt microservices so the complexity of managing and monitoring microservices grows.
+- Communicate with one another over a network, and it’s crucial to understand the health and performance of these interactions.
+
+Scalability and Dynamic Nature
+
+- Containers can be spun up and down quickly, and applications can be scaled on demand.
+- This dynamic nature requires sophisticated monitoring tools to ensure that the system is performing as expected and to catch any issues before they impact the users.
+
+Troubleshooting and Root Cause Analysis
+
+- In complex distributed system like K8s, understanding the root cause of an issue is challenging.
+- Observability tools help in collecting data and metrics that can be critical in troubleshooting issues.
+
+Compliance and Auditing
+
+- In regulated industries, monitoring is essential not just for performance but for compliance reasons.
+- They need to have detailed logs and metrics to satisfy regulatory requirements.
+
+#### Key Components of Monitoring
+
+Metrics
+- Numerical data points that represent the state of a system at a point in time. 
+- Common metrics in microservices monitoring include request rate, error rate, 
+response times, CPU usage, memory usage, and network throughput.
+
+Logs
+
+- Records of events that occur within an application or system.
+- Invaluable when it comes to debugging and understanding the behavior of
+microservices.
+
+Traces
+
+- Tracking requests useful in a microservices architecture where a single user request might involve multiple services.
+- Understanding the flow of requests and identifying performance bottlenecks.
+
+Alerting
+
+- Receive alerts when something goes wrong or when certain thresholds are crossed.
+- Notified of issues in real-time, allowing for quick resolution.
+
+Visualization
+
+- Creating dashboards that can display metrics, logs, and traces in a user-friendly manner.
+- Gaining insights at a glance and makes it easier to understand the state of the microservices and the underlying infrastructure.
+
+Health Checks
+
+- Regularly checking the health of microservices is important.
+- Involve simple checks to see if a service is up and running, or more complex checks like testing if a service can connect to a database.
+- Three Types of Health Checks:
+  - Liveness Checks
+  - Readiness Checks
+  - Performance Checks
+
+Integration with CI/CD
+
+- Monitoring should be integrated with CI/CD pipelines.
+- Allows for a feedback loop where issues detected in monitoring can be addressed in continuous integration and deployment processes.
+
+#### Cloud-Native Monitoring Tools
+
+- Prometheus
+- Grafana
+- Dynatrace
+- Datadog
+- Cortex
+- OpenMetrics
+
+#### Cloud Serverless Monitoring tools
+
+- Amazon CloudWatch and AWS X-Ray
+- Google Stackdriver
+- Microsoft Azure Monitor
+
+### Prometheus
+
+- Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability.
+- It collects metrics from configured targets at given intervals, evaluates rule
+expressions, displays the results, and can trigger alerts when specified conditions are observed.
+- Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.
+- Prometheus is a monitoring platform that collects metrics from monitored targets by scraping metrics HTTP endpoints on these targets.
+- Widely adopted in cloud-native environments and is especially popular for monitoring Kubernetes clusters and microservices.
+
+#### Prometheus Features
+
+- A multi-dimensional data model (time series defined by metric name and set of key/value dimensions)
+- PromQL, a powerful and flexible query language to leverage this dimensionality
+- No dependency on distributed storage; single server nodes are autonomous
+- An HTTP pull model for time series collection
+- Pushing time series is supported via an intermediary gateway for batch jobs
+- Targets are discovered via service discovery or static configuration
+- Multiple modes of graphing and dashboarding support
+- Support for hierarchical and horizontal federation
+
+#### How is Prometheus used in Cloud-native Kubernetes and Microservices?
+
+Data Collection and Storage
+
+- Scrapes metrics from instrumented jobs
+- Stores scraped samples locally
+- Runs rules over data for aggregation or alerts
+
+Service Discovery
+
+- Automatically discovers scraping targets in Kubernetes
+- Adapts to dynamically scheduled services
+
+Metrics Exposition
+
+- Microservices expose metrics via HTTP endpoint (e.g. /metrics)
+- Uses libraries like client_golang, client_java
+
+Flexible Query Language (PromQL)
+
+- Select and aggregate metric data
+- Powerful for querying large number of services
+
+Visualization
+
+- Basic visualization via web UI
+- Often used with Grafana for advanced dashboards
+
+Alerting
+
+- Define alert conditions based on Prometheus expressions
+- Sends notifications through Alertmanager
+
+Integration with Kubernetes
+
+- Works with Kubernetes labels for flexible queries
+- Aligns with Kubernetes metadata definitions
+
+Use Cases
+
+- Comprehensive observability of microservices in Kubernetes
+- Integrated with Grafana for visualization and Alertmanager for notifications
+
+![Prometheus Architecture](./resources/761-prometheus.png)
+
+#### How Prometheus Works?
+
+Setup and Configuration of Prometheus in Kubernetes
+
+- Deploy Prometheus to your Kubernetes cluster.
+- Configure Prometheus to discover and scrape metrics from your microservices.
+
+Instrumenting Microservices
+
+- Implement metric exposition in your microservices using Prometheus client libraries.
+- Expose metrics through an HTTP endpoint (usually /metrics).
+
+Service Discovery
+
+- Use Prometheus’s Kubernetes service discovery to dynamically discover services to monitor.
+
+Defining Recording Rules and Alerts
+
+- Use recording rules to precompute frequently needed or computationally expensive expressions.
+
+Querying Metrics with PromQL
+
+- Use PromQL, Prometheus’s flexible query language, to query your metrics.
+
+Visualizing Data
+
+- Integrate Prometheus with Grafana.
+- Setup dashboards in Grafana to visualize the metrics collected by Prometheus.
+
+Setting up Alertmanager
+
+- Configure Alertmanager to group, suppress, and route the alerts to the appropriate channel like email, Slack, PagerDuty, etc.
+
+Gaining Insights and Taking Action
+
+- Use the insights gained from monitoring to understand the behavior of your microservices.
+- Take actions like scaling, optimizing, or troubleshooting based on the monitoring data.
+
+![How Prometheus Works](./resources/762-prometheus.png)
