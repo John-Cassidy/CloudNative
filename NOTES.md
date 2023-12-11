@@ -293,14 +293,14 @@ W1126 11:33:54.053549   15628 main.go:291] Unable to resolve the current Docker 
     > gcr.io/k8s-minikube/kicbase...:  453.90 MiB / 453.90 MiB  100.00% 51.02 M
 🔥  Creating docker container (CPUs=2, Memory=16300MB) ...
 🐳  Preparing Kubernetes v1.28.3 on Docker 24.0.7 ...
-    ▪ Generating certificates and keys ...
-    ▪ Booting up control plane ...
-    ▪ Configuring RBAC rules ...
+    - Generating certificates and keys ...
+    - Booting up control plane ...
+    - Configuring RBAC rules ...
 🔗  Configuring bridge CNI (Container Networking Interface) ...
 🔎  Verifying Kubernetes components...
-    ▪ Using image docker.io/kubernetesui/dashboard:v2.7.0
-    ▪ Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
-    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+    - Using image docker.io/kubernetesui/dashboard:v2.7.0
+    - Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+    - Using image gcr.io/k8s-minikube/storage-provisioner:v5
 💡  Some dashboard features require the metrics-server addon. To enable all features please run:
 
         minikube addons enable metrics-server
@@ -350,8 +350,8 @@ minikube dashboard
 #Results
 W1126 12:11:45.207027    2436 main.go:291] Unable to resolve the current Docker CLI context "default": context "default": context not found: open C:\Users\jpcas\.docker\contexts\meta\37a8eec1ce19687d132fe29051dca629d164e2c4958ba141d5f4133a33f0688f\meta.json: The system cannot find the path specified.
 🔌  Enabling dashboard ...
-    ▪ Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
-    ▪ Using image docker.io/kubernetesui/dashboard:v2.7.0
+    - Using image docker.io/kubernetesui/metrics-scraper:v1.0.8
+    - Using image docker.io/kubernetesui/dashboard:v2.7.0
 💡  Some dashboard features require the metrics-server addon. To enable all features please run:
 
         minikube addons enable metrics-server
@@ -451,15 +451,15 @@ docker push jpcassidy/productservice:latest
 #### While you can create standalone Pods on Kubernetes, it is not recommended
 
 because Pods are the lowest-level abstraction in Kubernetes.
-▪ Lack of self-healing
+- Lack of self-healing
 If a Pod fails, is terminated, or becomes unhealthy, it will not be automatically
 replaced. In contrast, higher-level abstractions like Deployments automatically
 manage the desired number of replicas and replace any failed Pods.
-▪ No scaling support
+- No scaling support
 Need to manually create and manage multiple Pod YAML files to scale your
 application. Deployments make scaling easy by allowing you to simply update
 the desired number of replicas.
-▪ Should make the Pods Resilient with Deployments
+- Should make the Pods Resilient with Deployments
 
 #### Creating a Pod Definition product-pod.yaml
 
@@ -897,11 +897,11 @@ The install of kubernetes-helm was successful.
 
 Optional Instructions - Download and install the Helm CLI
 [Youtube Video - Install Helm On Windows](https://www.youtube.com/watch?v=2fop7rvHrac)
-▪ https://helm.sh/docs/intro/install/
-▪ https://github.com/helm/helm/releases
-▪ Download and un-zip
-▪ Create C:/tools folder
-▪ Add path into ENV variables
+- https://helm.sh/docs/intro/install/
+- https://github.com/helm/helm/releases
+- Download and un-zip
+- Create C:/tools folder
+- Add path into ENV variables
 
 ### Create Helm Chart for ProductService
 
@@ -1350,21 +1350,21 @@ Step 6. Stop the cluster
 
 ### Hands-on: Deploy Redis Cache on a Kubernetes Cluster
 
-▪ Step 1. Start Kubernetes - minikube start
-▪ Step 2. Start Redis - Deploy with Bitnami Helm Charts
-▪ Step 3. Use the built-in Redis client
-▪ Step 4. Simulate node failure and node scales
-▪ Step 5. Stop the cluster
+- Step 1. Start Kubernetes - minikube start
+- Step 2. Start Redis - Deploy with Bitnami Helm Charts
+- Step 3. Use the built-in Redis client
+- Step 4. Simulate node failure and node scales
+- Step 5. Stop the cluster
 
 ![Deploy Redis in a Single Kubernetes Cluster](./resources/512-deploy-redis-cache-to-kubernetes-cluster.png)
 
 ### Hands-on: Deploy Kafka Message Broker on a Kubernetes Cluster
 
-▪ Step 1. Start Kubernetes - minikube start
-▪ Step 2. Start Kafka - Deploy with Bitnami Helm Charts
-▪ Step 3. Use the built-in Kafka client - Publish and Subscribe Topic
-▪ Step 4. Simulate node failure and node scales
-▪ Step 5. Stop the cluster
+- Step 1. Start Kubernetes - minikube start
+- Step 2. Start Kafka - Deploy with Bitnami Helm Charts
+- Step 3. Use the built-in Kafka client - Publish and Subscribe Topic
+- Step 4. Simulate node failure and node scales
+- Step 5. Stop the cluster
 
 [Kafka Artifact Hub](https://artifacthub.io/packages/helm/bitnami/kafka)
 
@@ -2003,3 +2003,240 @@ jobs:
 
 ## Pillar8: Monitoring & Observability with Distributed Logging and Tracing
 
+### Hands-on: Prometheus & Grafana Monitoring On Kubernetes Using Helm
+
+Setup Prometheus & Grafana Monitoring On Kubernetes Cluster Using Helm
+Kubernetes Monitoring using Prometheus and Grafana
+
+- Step 1. Prepare environment (Start Docker Desktop, minikube k8s cluster and helm)
+- Step 2. Setup and Install Prometheus
+- Step 3. Access Prometheus Dashboard
+- Step 4. Setup and Install Grafana
+- Step 5. Access Grafana Dashboard
+- Step 6. Add Grafana Datasource for Prometheus Server
+- Step 7. Create Kubernetes Cluster Dashboard on Grafana
+- Step 8. Cleanup Resources (helm, kubectl, minikube)
+
+#### Step 2. Setup and Install Prometheus
+
+Add Helm Repositories:
+To get the latest Helm charts for Prometheus and Grafana, you need to add their repositories.
+
+goto Prometheus ArtifactHub Helm Repository:
+https://artifacthub.io/packages/helm/prometheus-community/prometheus
+
+Examine the helm repository on ArtifactHub
+Install commands, values yamls..
+
+Add the Prometheus Helm repo
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+Update Helm repos to fetch the latest charts
+helm repo update
+
+Check helm repos
+helm repo list
+
+Create Monitoring Namespace:
+This namespace will hold all our monitoring components.
+
+kubectl create namespace monitoring
+
+Install Prometheus:
+Deploy Prometheus into the monitoring namespace.
+
+helm install prometheus prometheus-community/prometheus --namespace monitoring
+
+Wait for a couple of minutes to let Prometheus components deploy and start.
+
+Check Kubernetes
+kubectl get all -n monitoring
+
+#### Step 3. Access Prometheus Dashboard
+
+See K8s Services:
+kubectl get svc -n monitoring
+
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+prometheus-alertmanager               ClusterIP   10.101.254.6     <none>        9093/TCP   11m
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP   11m
+prometheus-kube-state-metrics         ClusterIP   10.97.118.91     <none>        8080/TCP   11m
+prometheus-prometheus-node-exporter   ClusterIP   10.103.244.211   <none>        9100/TCP   11m
+prometheus-prometheus-pushgateway     ClusterIP   10.110.232.46    <none>        9091/TCP   11m
+prometheus-server                     ClusterIP   10.99.166.109    <none>        80/TCP     11m
+
+Expose port-forward to prometheus-server
+
+minikube service prometheus-server -n monitoring
+
+Examine Prometheus Dashboard
+Graph
+Alerts
+Configuration
+Rules
+Targets
+Service Discovery
+
+goto Graph
+	search for "node"..
+		node_cpu_seconds_total
+		node_disk_discard_time_seconds_total
+        
+#### Step 3.1 Prometheus metrics
+
+http://127.0.0.1:60663/metrics
+
+See different type of metrics: gauge, counter..
+
+HELP go_memstats_alloc_bytes Number of bytes allocated and still in use.
+TYPE go_memstats_alloc_bytes gauge
+go_memstats_alloc_bytes 8.98326e+07
+
+HELP go_memstats_alloc_bytes_total Total number of bytes allocated, even if freed.
+TYPE go_memstats_alloc_bytes_total counter
+go_memstats_alloc_bytes_total 7.12498864e+08
+
+HELP go_memstats_buck_hash_sys_bytes Number of bytes used by the profiling bucket hash table.
+TYPE go_memstats_buck_hash_sys_bytes gauge
+go_memstats_buck_hash_sys_bytes 1.542932e+06
+
+HELP go_memstats_frees_total Total number of frees.
+TYPE go_memstats_frees_total counter
+go_memstats_frees_total 1.390623e+06
+
+#### Step 4. Setup and Install Grafana
+
+Add Helm Repositories:
+To get the latest Helm charts for Prometheus and Grafana, you need to add their repositories.
+
+goto Grafana ArtifactHub Helm Repository:
+https://artifacthub.io/packages/helm/grafana/grafana
+
+Examine the helm repository on ArtifactHub
+Install commands, values yamls..
+
+Add the Grafana Helm repo
+helm repo add grafana https://grafana.github.io/helm-charts
+
+Update Helm repos to fetch the latest charts
+helm repo update
+
+Check helm repos
+helm repo list
+
+Install Grafana:
+Deploy Grafana into the monitoring namespace.
+
+helm install grafana grafana/grafana --namespace monitoring
+
+Wait for a couple of minutes to let Prometheus components deploy and start.
+
+Check Kubernetes
+kubectl get all -n monitoring
+
+#### Step 5. Access Grafana Dashboard
+
+See K8s Services:
+kubectl get svc -n monitoring
+
+NAME                                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+grafana                               ClusterIP   10.106.219.248   <none>        80/TCP     10m
+prometheus-alertmanager               ClusterIP   10.101.254.6     <none>        9093/TCP   11m
+prometheus-alertmanager-headless      ClusterIP   None             <none>        9093/TCP   11m
+prometheus-kube-state-metrics         ClusterIP   10.97.118.91     <none>        8080/TCP   11m
+prometheus-prometheus-node-exporter   ClusterIP   10.103.244.211   <none>        9100/TCP   11m
+prometheus-prometheus-pushgateway     ClusterIP   10.110.232.46    <none>        9091/TCP   11m
+prometheus-server                     ClusterIP   10.99.166.109    <none>        80/TCP     11m
+
+Access Grafana Dashboard:
+You can use minikube to easily open the Grafana dashboard.
+Expose port-forward to grafana
+
+minikube service grafana -n monitoring
+
+This will open Grafana in your default web browser. 
+Use the credentials obtained in the next step to log in.
+
+To retrieve your Grafana login credentials:
+Open Bash Command window:
+
+echo "User: admin"
+echo "Password: $(kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode)"
+
+Examine Grafana Dashboard
+
+#### Step 6. Add Grafana Datasource for Prometheus Server
+
+Make sure that prometheus is running on your k8s cluster
+
+Make sure that grafana dashboard is port-forwarded:
+
+kubectl get svc -n monitoring
+minikube service grafana -n monitoring
+
+Connect Grafana to Prometheus:
+After logging into Grafana, click on the gear icon ⚙️ on the left side to navigate to the Configuration menu.
+
+Click on Data Sources.
+
+Click Add data source and choose Prometheus.
+
+In the HTTP section, set the URL:
+    http://prometheus-server.monitoring.svc.cluster.local
+ or you can give minikube address of Prometheus
+    http://127.0.0.1:60663/
+
+Click Save & Test.
+
+Examine Grafana
+
+goto Connections
+    Data Sources
+        see Prometheus
+
+#### Step 7. Create Kubernetes Cluster Dashboard on Grafana
+
+Import Kubernetes Monitoring Dashboards:
+Go to the Grafana dashboards page 
+https://grafana.com/grafana/dashboards/
+
+Find a Kubernetes monitoring dashboard (e.g., "Kubernetes Cluster").
+Copy ID to clipboard. Note the dashboard ID.
+Back in Grafana, click on the + sign on the left, choose Import, enter the dashboard ID, and follow the prompts.
+
+Kubernetes Cluster (Prometheus)
+https://grafana.com/grafana/dashboards/6417-kubernetes-cluster-prometheus/
+
+Summary metrics about containers running on Kubernetes nodes. 
+
+Another Option:
+Search for: Kubernetes cluster
+Kubernetes cluster monitoring (via Prometheus)
+https://grafana.com/grafana/dashboards/315-kubernetes-cluster-monitoring-via-prometheus/
+
+Observe Metrics:
+Navigate around the imported dashboard.
+You should see metrics related to your Minikube node, pods, deployments, and other Kubernetes components.
+
+Monitors Kubernetes cluster using Prometheus. Shows overall cluster CPU / Memory / Filesystem usage as well as individual pod, containers, systemd services statistics.
+
+#### Step 8. Cleanup Resources (helm, kubectl, minikube)
+
+Uninstall Prometheus and Grafana:
+
+helm uninstall prometheus -n monitoring
+helm uninstall grafana -n monitoring
+
+Verify helm repos:
+
+helm list
+helm repo list
+
+Delete the monitoring namespace:
+
+kubectl delete namespace monitoring
+
+Check K8s
+
+kubectl get all
+kubectl get all -n monitoring
