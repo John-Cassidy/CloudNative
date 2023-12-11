@@ -1088,9 +1088,9 @@ Compliance and Auditing
 #### Key Components of Monitoring
 
 Metrics
-- Numerical data points that represent the state of a system at a point in time. 
-- Common metrics in microservices monitoring include request rate, error rate, 
-response times, CPU usage, memory usage, and network throughput.
+
+- Numerical data points that represent the state of a system at a point in time.
+- Common metrics in microservices monitoring include request rate, error rate, response times, CPU usage, memory usage, and network throughput.
 
 Logs
 
@@ -1246,3 +1246,100 @@ Gaining Insights and Taking Action
 - Take actions like scaling, optimizing, or troubleshooting based on the monitoring data.
 
 ![How Prometheus Works](./resources/762-prometheus.png)
+
+### Distributed Logging and Tracing
+
+Why Distributed Logging?
+
+- Distributed apps are split into multiple independent services that can run on different containers, making the centralized collection and analysis of logs a fundamental requirement for efficient debugging, monitoring, and alert tracking.
+- Distributed logging provides capturing, storing, and analyzing log data from various services that are distributed across multiple machines and containers.
+
+Why Distributed Tracing?
+
+- In a monolithic application, a traditional debugger enough to understand application performance. But in a distributed system, a request can criss-cross multiple services, making it challenging to diagnose performance bottlenecks or failures.
+- When you have dozens of services interacting, understanding how a request traverses these services becomes crucial for effective debugging and optimization.
+- Distributed tracing provides a method to track the journey of a request across various microservices.
+
+#### Microservices Observability with Distributed Logging and Distributed Tracing
+
+- Microservice have a strategy for monitoring and managing the complex dependencies on microservices
+- Need to implement microservices observability with using distributed logging and tracing features.
+- Microservices Observability gives us greater operational insight.
+- Monitor and understand the behavior and performance of a system made up of microservices.
+- Distributed Logging and Distributed Tracing are two key tools that improve observability in microservices.
+- Distributed Logging is a practice of collecting, storing, and analyzing log data from multiple service instances.
+- Behavior of the system over time, identifying patterns and trends, and troubleshooting issues.
+Distributed Tracing is tracking the flow of requests through a microservices architecture, to see how the different service instances interact with each other.
+- See the performance of the system, identifying bottlenecks, and troubleshooting issues.
+
+![Real-world Example of Microservices Observability with Distributed Logging and Distributed Tracing](/./resources/771-distributed-logging-tracing.png)
+
+#### Cloud-Native Distributed Logging-Tracing Tools
+
+Cloud-Native Distributed Logging tools
+
+- Elasticsearch, Logstash, and Kibana (ELK Stack)
+- Fluentd & Fluent Bit
+- Loki
+- Graylog
+
+Cloud-Native Distributed Tracing tools
+
+- Jaeger
+- Zipkin
+- OpenTelemetry
+- Lightstep
+
+Cloud Serverless Logging-Tracing tools
+
+- Amazon CloudWatch Logs and AWS X-Ray
+- Google Stackdriver and Cloud Trace
+- Azure Monitor Logs and Azure Application Insights
+
+#### Elastic Stack for Microservices Observability with Distributed Logging
+
+![Elastic Stack for Microservices Observability with Distributed Logging](./resources/775-ELK-stack.png)
+
+Why logging with ElasticSearch and Kibana in Microservices?
+
+- Logging is critical to implement to identify problems in distributed architecture.
+- Elastic Stack used to collect, store, and analyze log data from multiple service instances in a microservices architecture.
+- Useful for understanding the behavior of the system over time, identifying patterns and trends, and troubleshooting issues.
+- Elastic Stack might be used to collect log data from each service instance.
+- Kibana to visualize and analyze the data in order to identify  patterns or trends.
+
+![Real-world Example with ElasticStack](./resources/777-ELK-stack.png)
+
+#### Distributed Tracing with OpenTelemetry using Zipkin
+
+- Distributed Tracing is used to track the flow of a request as it is processed by different microservices in a system.
+- Different microservices are interacting and identify issues or bottlenecks and troubleshooting issues in the system.
+- OpenTelemetry is an open-source project that provides a set of APIs for collecting and exporting telemetry data; traces, metrics, and logs.
+- Zipkin is a distributed tracing system that collects and stores trace data from microservices, provides a web UI for viewing and analyzing trace data.
+- To use OpenTelemetry with Zipkin for microservices distributed tracing, OpenTelemetry SDK would be integrated.
+- Allows to collect trace data as requests flow through the system, and send data to a Zipkin server for storage and visualization.
+
+##### Real-world Example of Distributed Tracing with OpenTelemetry using Zipkin
+
+- Use OpenTelemetry with Zipkin to collect trace data as requests flow through the system.
+- When a user adds an item to their shopping cart, the trace include information about the request.
+- The trace data collected by the OpenTelemetry SDKs integrated into each service instance, and then sent to a Zipkin server for storage and visualization.
+- Use the Zipkin UI to visualize and analyze the trace data, to identify patterns or trends.
+
+![Real-world Example of Distributed Tracing with OpenTelemetry using Zipkin](./resources/779-opentelemetry-zipkin.png)
+
+#### Design with Monitoring & Observibility Tools
+
+Tools: Cloud-Native Monitoring & Observability
+
+- Monitoring: Prometheus - Grafana
+- Distributed Logging: Elasticsearch, Logstash, and Kibana (ELK Stack)
+- Distributed Tracing: Jaeger
+
+![Microservices with Prometheus, ELK Stack and Jeager](./resources/786-ELK-stack.png)
+
+- Centralized Configuration: Use a tool like ConfigMap in Kubernetes or Spring Cloud Config for centralized configuration.
+- Health Checks: Implement health check endpoints (/health or /status) for services. Integrate with Prometheus for alerting on service health.
+- Alerting: Use Alertmanager (part of the Prometheus stack) to manage alerts based on predefined conditions in the metrics.
+- Correlation IDs: Generate unique IDs at the entry points of your systems (like APIs) and pass these through service calls. This helps in correlating logs and traces across services.
+
